@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vd.mall.admin.dao.UserDao">
+    <resultMap id="userDetailsResultMapper" type="com.vd.mall.admin.security.UserDetail">
+        <association property="user">
+
+        </association>
+        <collection property="roles">
+
+        </collection>
+    </resultMap>
+
+    <select id="getUserDetailsByUserName" parameterType="java.lang.String" resultMap="userDetailsResultMapper">
+        SELECT * FROM `user` WHERE `sex` = #{sex};
+    </select>
+</mapper>

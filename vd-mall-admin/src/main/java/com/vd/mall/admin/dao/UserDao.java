@@ -1,6 +1,6 @@
 package com.vd.mall.admin.dao;
 
-import com.vd.mall.admin.sucerity.UserDetail;
+import com.vd.mall.admin.security.UserDetail;
 import org.springframework.stereotype.Repository;
 
 /**

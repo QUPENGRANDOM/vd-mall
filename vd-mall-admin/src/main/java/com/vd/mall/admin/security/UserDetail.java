@@ -1,4 +1,4 @@
-package com.vd.mall.admin.sucerity;
+package com.vd.mall.admin.security;
 
 import com.vd.mall.admin.entity.User;
 import org.springframework.security.core.GrantedAuthority;
