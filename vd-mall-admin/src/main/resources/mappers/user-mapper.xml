@@ -1,16 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vd.mall.admin.dao.UserDao">
-    <resultMap id="userDetailsResultMapper" type="com.vd.mall.admin.security.UserDetail">
-        <association property="user">
-
-        </association>
-        <collection property="roles">
-
-        </collection>
+    <resultMap id="BaseResultMap" type="com.vd.mall.admin.entity.User">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+        <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+        <result column="sex" jdbcType="BIT" property="sex" />
+        <result column="enabled" jdbcType="BIT" property="enabled" />
+        <result column="account_non_expired" jdbcType="BIT" property="accountNonExpired" />
+        <result column="account_non_locked" jdbcType="BIT" property="accountNonLocked" />
+        <result column="credentials_non_expired" jdbcType="BIT" property="credentialsNonExpired" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     </resultMap>
 
-    <select id="getUserDetailsByUserName" parameterType="java.lang.String" resultMap="userDetailsResultMapper">
-        SELECT * FROM `user` WHERE `sex` = #{sex};
+    <sql id="Base_Column_List">
+        `id`, `username`, `password`, `avatar`, `nickname`, `sex`, `enabled`, `account_non_expired`, `account_non_locked`,
+        `credentials_non_expired`, `update_time`, `create_time`
+    </sql>
+
+    <select id="findOneById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select * from  `user` where id = #{id}
     </select>
+    <resultMap id="userDetailsResultMapper" type="com.vd.mall.admin.security.UserDetail">
+            <id column="id" jdbcType="INTEGER" property="id" />
+            <result column="username" jdbcType="VARCHAR" property="username" />
+            <result column="password" jdbcType="VARCHAR" property="password" />
+            <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+            <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+            <result column="sex" jdbcType="BIT" property="sex" />
+            <result column="enabled" jdbcType="BIT" property="enabled" />
+            <result column="account_non_expired" jdbcType="BIT" property="accountNonExpired" />
+            <result column="account_non_locked" jdbcType="BIT" property="accountNonLocked" />
+            <result column="credentials_non_expired" jdbcType="BIT" property="credentialsNonExpired" />
+            <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+            <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+            <collection property="roles" ofType="java.lang.String" select="test" column="id">
+            </collection>
+    </resultMap>
+
+    <select id="test" parameterType="java.lang.String">
+        SELECT username FROM `user` where  id = #{id};
+    </select>
+
+    <select id="getUserDetailsByUserName" parameterType="java.lang.String" resultMap="userDetailsResultMapper">
+        SELECT   `id`, `username`, `password`, `avatar`, `nickname`, `sex`, `enabled`, `account_non_expired`, `account_non_locked`,
+                 `credentials_non_expired`, `update_time`, `create_time` FROM `user` WHERE `username` = #{username};
+    </select>
+
+    <insert id="insert" parameterType="com.vd.mall.admin.entity.User">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into user (username, password, avatar,
+        nickname, sex, enabled, account_non_expired,
+        account_non_locked, credentials_non_expired, update_time,
+        create_time)
+        values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR},
+        #{nickname,jdbcType=VARCHAR}, #{sex,jdbcType=BIT}, #{enabled,jdbcType=BIT}, #{accountNonExpired,jdbcType=BIT},
+        #{accountNonLocked,jdbcType=BIT}, #{credentialsNonExpired,jdbcType=BIT}, #{updateTime,jdbcType=TIMESTAMP},
+        #{createTime,jdbcType=TIMESTAMP})
+    </insert>
 </mapper>

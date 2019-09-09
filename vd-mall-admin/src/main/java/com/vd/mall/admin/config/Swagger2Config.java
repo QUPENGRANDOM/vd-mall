@@ -32,7 +32,7 @@ public class Swagger2Config {
         return new ApiInfoBuilder()
                 .title("SpringBoot2 集成 Swagger")
                 .description("swagger 学习总结")
-                .contact(new Contact("pengq", "", "pengq0717@qq.com"))
+                .contact(new Contact("pengq", "https://github.com/QUPENGRANDOM/vd-mall", "pengq0717@qq.com"))
                 .version("1.0")
                 .build();
     }

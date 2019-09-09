@@ -1,6 +1,5 @@
 package com.vd.mall.admin.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.Date;
@@ -23,8 +22,8 @@ public class User {
     private Date updateTime;
     private Date createTime;
 
-    @JsonIgnore
-    public void setPassword(String password) {
-        this.password = password;
-    }
+//    @JsonIgnore
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
 }

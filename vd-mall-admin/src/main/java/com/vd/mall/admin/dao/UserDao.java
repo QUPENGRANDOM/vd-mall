@@ -1,6 +1,8 @@
 package com.vd.mall.admin.dao;
 
+import com.vd.mall.admin.entity.User;
 import com.vd.mall.admin.security.UserDetail;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -8,5 +10,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserDao {
-    UserDetail getUserDetailsByUserName(String username);
+    UserDetail getUserDetailsByUserName(@Param("username") String username);
+    int insert(User user);
+    User findOneById(@Param("id") int id);
 }

@@ -12,12 +12,12 @@ import java.util.List;
 /**
  * Created by pengq on 2019/9/7 15:03.
  */
-public class UserDetail implements UserDetails {
-    private User user;
+public class UserDetail extends User implements UserDetails {
+//    private User user;
     private List<String> roles;
 
     public UserDetail(User user, List<String> roles) {
-        this.user = user;
+//        this.user = user;
         this.roles = roles;
     }
 
@@ -37,31 +37,40 @@ public class UserDetail implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return super.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return super.getUsername();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return user.isAccountNonExpired();
+        return super.isAccountNonExpired();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return user.isAccountNonLocked();
+        return super.isAccountNonLocked();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return user.isCredentialsNonExpired();
+        return super.isCredentialsNonExpired();
     }
 
     @Override
     public boolean isEnabled() {
-        return user.isEnabled();
+        return super.isEnabled();
+    }
+
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 }
