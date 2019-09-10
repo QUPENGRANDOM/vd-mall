@@ -41,16 +41,16 @@ public class UserController {
         return new SuccessResponse().withData(registered);
     }
 
-    @ApiOperation("用户登录")
-    @ApiImplicitParams({
-            @ApiImplicitParam(value = "用户名", name = "username", paramType = "query"),
-            @ApiImplicitParam(value = "登录密码", name = "password", paramType = "query")
-    })
-    @PostMapping(value = "/v1/users/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public RestResponse login(@RequestParam(value = "username") String username,
-                              @RequestParam(value = "password") String password) {
-        log.info("[{}] login at [{}]", username, new Date());
-        boolean login = userService.login(username, password);
-        return new SuccessResponse().withData(login);
-    }
+//    @ApiOperation("用户登录")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(value = "用户名", name = "username", paramType = "query"),
+//            @ApiImplicitParam(value = "登录密码", name = "password", paramType = "query")
+//    })
+//    @PostMapping(value = "/v1/users/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+//    public RestResponse login(@RequestParam(value = "username") String username,
+//                              @RequestParam(value = "password") String password) {
+//        log.info("[{}] login at [{}]", username, new Date());
+//        boolean login = userService.login(username, password);
+//        return new SuccessResponse().withData(login);
+//    }
 }

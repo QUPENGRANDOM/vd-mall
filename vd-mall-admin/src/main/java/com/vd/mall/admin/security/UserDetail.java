@@ -12,13 +12,24 @@ import java.util.List;
 /**
  * Created by pengq on 2019/9/7 15:03.
  */
-public class UserDetail extends User implements UserDetails {
-//    private User user;
+public class UserDetail implements UserDetails {
+    private User user;
     private List<String> roles;
 
-    public UserDetail(User user, List<String> roles) {
-//        this.user = user;
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
         this.roles = roles;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -37,40 +48,31 @@ public class UserDetail extends User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return super.getPassword();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return super.getUsername();
+        return user.getUsername();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return super.isAccountNonExpired();
+        return user.isAccountNonExpired();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return super.isAccountNonLocked();
+        return user.isAccountNonLocked();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return super.isCredentialsNonExpired();
+        return user.isCredentialsNonExpired();
     }
 
     @Override
     public boolean isEnabled() {
-        return super.isEnabled();
-    }
-
-
-    public List<String> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
+        return user.isEnabled();
     }
 }

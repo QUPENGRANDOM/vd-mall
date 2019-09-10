@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
             //用戶名不存在
             return false;
         }
-        if (!passwordEncoder.matches(userDetail.getPassword(), password)) {
+        if (!passwordEncoder.matches(password, userDetail.getPassword())) {
             // 密码不正确
             return false;
         }
