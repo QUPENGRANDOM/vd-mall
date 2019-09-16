@@ -8,9 +8,9 @@ import java.util.List;
  * Created by pengq on 2019/9/7 13:38.
  */
 public interface UserService {
-    boolean login(String username,String password);
-
     List<User> listUser();
 
     boolean register(User user);
+
+    boolean updatePassword(String oldPassword, String newPassword, String confirmPassword);
 }

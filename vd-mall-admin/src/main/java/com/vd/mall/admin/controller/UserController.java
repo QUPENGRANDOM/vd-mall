@@ -2,18 +2,17 @@ package com.vd.mall.admin.controller;
 
 import com.vd.mall.admin.entity.User;
 import com.vd.mall.admin.response.SuccessResponse;
+import com.vd.mall.admin.security.UserDetail;
 import com.vd.mall.admin.service.UserService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import vd.mall.response.RestResponse;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,16 +40,19 @@ public class UserController {
         return new SuccessResponse().withData(registered);
     }
 
-//    @ApiOperation("用户登录")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(value = "用户名", name = "username", paramType = "query"),
-//            @ApiImplicitParam(value = "登录密码", name = "password", paramType = "query")
-//    })
-//    @PostMapping(value = "/v1/users/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-//    public RestResponse login(@RequestParam(value = "username") String username,
-//                              @RequestParam(value = "password") String password) {
-//        log.info("[{}] login at [{}]", username, new Date());
-//        boolean login = userService.login(username, password);
-//        return new SuccessResponse().withData(login);
-//    }
+    @ApiOperation("获取当前登录用户")
+    @GetMapping(value = "/v1/users/current", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public RestResponse getCurrentLoginUser() {
+        UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return new SuccessResponse().withData(userDetail);
+    }
+
+    @ApiOperation("修改密码")
+    @PatchMapping(value = "/v1/users/password", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public RestResponse updatePassword(@RequestParam(name = "oldPassword") String oldPassword,
+                                       @RequestParam(name = "newPassword") String newPassword,
+                                       @RequestParam(name = "confirmPassword") String confirmPassword) {
+        boolean succeeded = userService.updatePassword(oldPassword, newPassword, confirmPassword);
+        return new SuccessResponse().withData(succeeded);
+    }
 }

@@ -63,11 +63,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(securityIgnoreApi).permitAll()
                 //其余请求全部需要登录后访问
                 .anyRequest().authenticated()
-                //这里配置的loginProcessingUrl为页面中对应表单的 action ，该请求为 post
+                //这里配置的loginProcessingUrl为页面中对应表单的 action ，该请求为 post，并设置可匿名访问
                 .and().formLogin().loginProcessingUrl("/admin/api/v1/users/login").permitAll()
                 //这里指定的是表单中name="username"的参数作为登录用户名，name="password"的参数作为登录密码
                 .usernameParameter("username").passwordParameter("password")
                 .successHandler((httpServletRequest, httpServletResponse, authentication) -> {
+                    //登录成功后获取当前登录用户
                     UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
                     log.info("用户[{}]于[{}]登录成功!", userDetail.getUser().getUsername(), new Date());
                     RestResponse response = new SuccessResponse().withData(true);
@@ -79,10 +80,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     RestResponse response = new SuccessResponse().withData(false);
                     this.writeResponse(httpServletResponse, response);
                 })
+                //这里配置的logoutUrl为登出接口，并设置可匿名访问
                 .and().logout().logoutUrl("/admin/api/v1/users/logout").permitAll()
                 .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
-                    long currentTimeMillis = System.currentTimeMillis();
-                    log.info("用户[{}]于[{}]注销成功!", "", new Date(currentTimeMillis));
+                    if (authentication != null) {
+                        log.info("用户[{}]于[{}]注销成功!", ((UserDetail) authentication.getPrincipal()).getUsername(), new Date());
+                    }
                     RestResponse response = new SuccessResponse().withData(true);
                     this.writeResponse(httpServletResponse, response);
                 });
@@ -95,6 +98,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+        //配置密码加密，这里声明成bean，方便注册用户时直接注入
         return new BCryptPasswordEncoder();
     }
 
