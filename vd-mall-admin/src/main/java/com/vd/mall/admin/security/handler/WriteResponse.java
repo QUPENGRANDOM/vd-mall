@@ -11,10 +11,10 @@ import java.io.PrintWriter;
 /**
  * Created by pengq on 2019/9/17 8:57.
  */
-public class WriteResponse {
+class WriteResponse {
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    public static void write(HttpServletResponse httpServletResponse, RestResponse restResponse) throws IOException {
+    static void write(HttpServletResponse httpServletResponse, RestResponse restResponse) throws IOException {
         httpServletResponse.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         PrintWriter out = httpServletResponse.getWriter();
         out.write(mapper.writeValueAsString(restResponse));
