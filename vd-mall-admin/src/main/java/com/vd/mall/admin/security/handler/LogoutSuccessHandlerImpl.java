@@ -5,7 +5,6 @@ import com.vd.mall.admin.security.UserDetail;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import vd.mall.response.RestResponse;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +22,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
         if (authentication != null) {
             log.info("用户[{}]于[{}]注销成功!", ((UserDetail) authentication.getPrincipal()).getUsername(), new Date());
         }
-        RestResponse response = new SuccessResponse().withData(true);
-        WriteResponse.write(httpServletResponse, response);
+       
+        WriteResponse.write(httpServletResponse, new SuccessResponse());
     }
 }

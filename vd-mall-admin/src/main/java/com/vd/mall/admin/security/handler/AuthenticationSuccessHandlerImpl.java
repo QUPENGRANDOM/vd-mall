@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import vd.mall.response.RestResponse;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +23,6 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         //登录成功后获取当前登录用户
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.info("用户[{}]于[{}]登录成功!", userDetail.getUser().getUsername(), new Date());
-        RestResponse response = new SuccessResponse().withData(true);
-        WriteResponse.write(httpServletResponse, response);
+        WriteResponse.write(httpServletResponse, new SuccessResponse());
     }
 }
