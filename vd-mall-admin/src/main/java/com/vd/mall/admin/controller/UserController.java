@@ -44,7 +44,7 @@ public class UserController {
     @GetMapping(value = "/v1/users/current", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public RestResponse getCurrentLoginUser() {
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return new SuccessResponse().withData(userDetail);
+        return new SuccessResponse().withData(userDetail.getUser());
     }
 
     @ApiOperation("修改密码")

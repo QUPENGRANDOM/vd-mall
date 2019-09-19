@@ -20,6 +20,12 @@ import java.util.Date;
  */
 @Slf4j
 public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHandler {
+    private String usernameKey;
+
+    public AuthenticationFailureHandlerImpl(String usernameKey) {
+        this.usernameKey = usernameKey;
+    }
+
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         GlobalResponseCode code;
@@ -38,7 +44,7 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
             code = GlobalResponseCode.LOGIN_FAILED_ERROR;
         }
         RestResponse response = new ErrorResponse(code);
-        String username = httpServletRequest.getParameter("username");
+        String username = httpServletRequest.getParameter(usernameKey);
         log.info("用户[{}]于[{}]登录失败,失败原因：[{}]", username, new Date(), response.getMessage());
 
         WriteResponse.write(httpServletResponse, response);
