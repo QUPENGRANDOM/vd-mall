@@ -21,9 +21,4 @@ public class User {
     private boolean enabled;
     private Date updateTime;
     private Date createTime;
-
-//    @JsonIgnore
-//    public void setPassword(String password) {
-//        this.password = password;
-//    }
 }

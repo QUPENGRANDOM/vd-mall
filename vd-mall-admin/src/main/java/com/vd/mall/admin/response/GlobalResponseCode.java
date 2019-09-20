@@ -11,7 +11,10 @@ public enum GlobalResponseCode implements IErrorCode {
     CREDENTIALS_EXPIRED_ERROR(503, "密码过期！"),
     ACCOUNT_EXPIRED_ERROR(504, "账户过期！"),
     ACCOUNT_DISABLED_ERROR(505, "账户被禁用！"),
-    LOGIN_FAILED_ERROR(506, "登录失败！");
+    LOGIN_FAILED_ERROR(506, "登录失败！"),
+
+    //权限
+    ACCESS_FORBIDDEN_ERROR(403,"无访问权限");
 
 
     private int code;

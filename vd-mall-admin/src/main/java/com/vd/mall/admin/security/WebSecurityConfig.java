@@ -1,6 +1,6 @@
 package com.vd.mall.admin.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vd.mall.admin.security.handler.AuthenticationEntryPointHandler;
 import com.vd.mall.admin.security.handler.AuthenticationFailureHandlerImpl;
 import com.vd.mall.admin.security.handler.AuthenticationSuccessHandlerImpl;
 import com.vd.mall.admin.security.handler.LogoutSuccessHandlerImpl;
@@ -47,9 +47,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private String passwordKey;
 
     @Autowired
-    ObjectMapper objectMapper;
-
-    @Autowired
     UserDetailService userDetailService;
 
     @Override
@@ -66,11 +63,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().formLogin().loginProcessingUrl(loginApi).permitAll()
                 //这里指定的是表单中name="username"的参数作为登录用户名，name="password"的参数作为登录密码
                 .usernameParameter(usernameKey).passwordParameter(passwordKey)
+                //登录成功后的返回结果
                 .successHandler(new AuthenticationSuccessHandlerImpl())
+                //登录失败后的返回结果
                 .failureHandler(new AuthenticationFailureHandlerImpl(usernameKey))
                 //这里配置的logoutUrl为登出接口，并设置可匿名访问
                 .and().logout().logoutUrl(logoutApi).permitAll()
-                .logoutSuccessHandler(new LogoutSuccessHandlerImpl());
+                //登出后的返回结果
+                .logoutSuccessHandler(new LogoutSuccessHandlerImpl())
+                //这里配置的为当未登录访问受保护资源时，返回json
+                .and().exceptionHandling().authenticationEntryPoint(new AuthenticationEntryPointHandler());
     }
 
     @Override
