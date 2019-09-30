@@ -2,6 +2,7 @@ package com.vd.mall.admin.security.handler;
 
 import com.vd.mall.admin.response.ErrorResponse;
 import com.vd.mall.admin.response.GlobalResponseCode;
+import com.vd.mall.admin.security.exception.ValidateCodeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.AuthenticationException;
@@ -32,6 +33,8 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
 
         if (e instanceof BadCredentialsException || e instanceof UsernameNotFoundException) {
             code = GlobalResponseCode.USERNAME_OR_PASSWORD_ERROR;
+        } else if (e instanceof ValidateCodeException) {
+            code = GlobalResponseCode.VALIDATE_CODE_NOT_MATCHED_ERROR;
         } else if (e instanceof LockedException) {
             code = GlobalResponseCode.ACCOUNT_LOCKED_ERROR;
         } else if (e instanceof CredentialsExpiredException) {
