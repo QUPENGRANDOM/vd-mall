@@ -24,8 +24,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.DefaultSecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.filter.GenericFilterBean;
 
 /**
  * Created by pengq on 2019/9/7 12:46.
@@ -74,7 +72,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, securityIgnoreResource).permitAll()
                 // 对登录注册要允许匿名访问;
                 .antMatchers(securityIgnoreApi).permitAll()
-                .antMatchers("/refresh/**").permitAll()
                 //其余请求全部需要登录后访问
                 .anyRequest().authenticated()
                 //这里配置的loginProcessingUrl为页面中对应表单的 action ，该请求为 post，并设置可匿名访问

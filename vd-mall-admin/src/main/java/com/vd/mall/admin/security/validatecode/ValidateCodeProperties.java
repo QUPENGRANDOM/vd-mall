@@ -2,12 +2,10 @@ package com.vd.mall.admin.security.validatecode;
 
 import com.vd.mall.admin.security.validatecode.image.ImageCodeProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * Created by pengq on 2019/9/30 9:11.
  */
-@Configuration
 @ConfigurationProperties(prefix = "spring.security.code")
 public class ValidateCodeProperties {
     private int length;

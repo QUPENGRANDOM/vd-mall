@@ -29,7 +29,7 @@ public abstract class AbstractValidateCodeProcessor implements ValidateCodeProce
         String code = RandomStringUtils.randomAlphanumeric(validateCodeProperties.getLength());
         long currentTime = System.currentTimeMillis();
         ValidateCode validateCode = new ValidateCode(code, new Date(currentTime + validateCodeProperties.getExpireInSecond() * 1000));
-        LOG.info("The validate Code is generated:[{}]", validateCode.getValidateCode());
+        LOG.info("The validate code is generated:[{}]", validateCode.getValidateCode());
         return validateCode;
     }
 
