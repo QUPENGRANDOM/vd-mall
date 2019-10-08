@@ -1,6 +1,5 @@
-package com.vd.mall.admin.security.validatecode.controller;
+package com.vd.mall.admin.security.validatecode;
 
-import com.vd.mall.admin.security.validatecode.ValidateCodeProcessor;
 import com.vd.mall.admin.security.validatecode.image.ImageCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;

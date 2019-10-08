@@ -1,6 +1,6 @@
 package com.vd.mall.admin;
 
-import com.vd.mall.admin.security.validatecode.controller.ValidateCodeGeneratorController;
+import com.vd.mall.admin.security.validatecode.ValidateCodeGeneratorController;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

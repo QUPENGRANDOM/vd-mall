@@ -1,7 +1,6 @@
 package com.vd.mall.admin.security.validatecode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vd.mall.admin.security.validatecode.controller.ValidateCodeGeneratorController;
 import com.vd.mall.admin.security.validatecode.filter.ValidateCodeAuthenticationFilter;
 import com.vd.mall.admin.security.validatecode.image.DefaultImageDrawer;
 import com.vd.mall.admin.security.validatecode.image.ImageCodeGenerator;
