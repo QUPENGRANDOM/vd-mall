@@ -26,8 +26,10 @@ public abstract class AbstractValidateCodeProcessor implements ValidateCodeProce
 
     @Override
     public ValidateCode generator() {
+        //生成随机字母和数字
         String code = RandomStringUtils.randomAlphanumeric(validateCodeProperties.getLength());
         long currentTime = System.currentTimeMillis();
+        //设置验证码过期时间
         ValidateCode validateCode = new ValidateCode(code, new Date(currentTime + validateCodeProperties.getExpireInSecond() * 1000));
         LOG.info("The validate code is generated:[{}]", validateCode.getValidateCode());
         return validateCode;
@@ -35,6 +37,7 @@ public abstract class AbstractValidateCodeProcessor implements ValidateCodeProce
 
     @Override
     public void verification(HttpServletRequest request, String code) throws ValidateCodeException {
+        //从session中取出验证码，这里的 validateCodeStorage为接口 之后可以扩展为 基于redis的
         ValidateCode validateCode = validateCodeStorage.get(request);
         if (validateCode == null) {
             throw new ValidateCodeNotFoundException("The captcha not found");
@@ -50,6 +53,7 @@ public abstract class AbstractValidateCodeProcessor implements ValidateCodeProce
 
     @Override
     public boolean store(HttpServletRequest request, ValidateCode code) {
+        //向session写入验证码
         return validateCodeStorage.set(request, code);
     }
 }

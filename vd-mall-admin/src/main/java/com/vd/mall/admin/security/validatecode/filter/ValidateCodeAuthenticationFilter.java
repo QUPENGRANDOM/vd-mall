@@ -27,7 +27,9 @@ public class ValidateCodeAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        //验证该请求我们是否进行拦截，不拦截这里直接执行下一个 Filter
         if (checkMatch(request)) {
+            //获取验证码
             String validateCode = obtainValidateCode(request);
             if (validateCode == null) {
                 validateCode = "";
@@ -36,8 +38,10 @@ public class ValidateCodeAuthenticationFilter extends OncePerRequestFilter {
             validateCode = validateCode.trim();
 
             try {
+                //进行验证，验证失败抛出异常
                 validateCodeProcessor.verification(request, validateCode);
             } catch (ValidateCodeException e) {
+                // 这里捕获验证失败异常，停止执行下一个Filter
                 authenticationFailureHandler.onAuthenticationFailure(request, response, e);
                 return;
             }

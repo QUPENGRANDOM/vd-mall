@@ -24,8 +24,11 @@ public class ValidateCodeGeneratorController {
 
     @GetMapping(value = "/refresh", produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] getValidateCode(HttpServletRequest request) {
+        //生成验证码
         ImageCode code = (ImageCode) validateCodeProcessor.send();
+        //将验证码存储到session中
         validateCodeProcessor.store(request, code);
+        //返回验证码图片的字节数组给页面
         return code.getImage();
     }
 }
