@@ -2,7 +2,7 @@ package com.vd.mall.admin.security.handler;
 
 import com.vd.mall.admin.response.ErrorResponse;
 import com.vd.mall.admin.response.GlobalResponseCode;
-import com.vd.mall.admin.security.exception.ValidateCodeException;
+import com.vd.mall.admin.security.validatecode.exception.ValidateCodeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.AuthenticationException;

@@ -16,5 +16,5 @@ public interface UserDao {
     int insert(User user);
     User findOneById(@Param("id") int id);
     int update(User user);
-    List<User> findAll();
+    List<String> findAll(@Param("database") String database);
 }

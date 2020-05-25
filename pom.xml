@@ -6,6 +6,7 @@
     <modules>
         <module>vd-mall-admin</module>
         <module>vd-mall-response</module>
+        <module>vd-mall-sso</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -43,11 +44,6 @@
             <releases>
                 <enabled>true</enabled>
             </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </snapshots>
         </repository>
     </repositories>
 

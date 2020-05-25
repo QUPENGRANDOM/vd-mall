@@ -1,6 +1,6 @@
 package com.vd.mall.admin.security.provider;
 
-import com.vd.mall.admin.security.exception.ValidateCodeException;
+import com.vd.mall.admin.security.validatecode.exception.ValidateCodeException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;

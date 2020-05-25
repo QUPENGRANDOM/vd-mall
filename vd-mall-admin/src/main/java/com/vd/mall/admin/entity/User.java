@@ -21,4 +21,5 @@ public class User {
     private boolean enabled;
     private Date updateTime;
     private Date createTime;
+    private String database;
 }

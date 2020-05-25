@@ -1,0 +1,32 @@
+package org.xmcxh.vd.mall.sso.service;
+
+import org.xmcxh.vd.mall.sso.dto.ModifyPasswordRequest;
+import org.xmcxh.vd.mall.sso.exception.UserNameExistsException;
+import org.xmcxh.vd.mall.sso.exception.UserNotFoundException;
+import org.xmcxh.vd.mall.sso.exception.UserPasswordException;
+import org.xmcxh.vd.mall.sso.modle.UcsUser;
+import org.xmcxh.vd.mall.sso.security.UserDetail;
+import org.xmcxh.vd.mall.sso.vo.UcsUserVO;
+import vd.mall.response.PageResponse;
+
+/**
+ * Created by pengq on 2020/5/12 14:29.
+ */
+public interface UcsUserService {
+
+    void createUser(UcsUser ucsUser);
+
+    void modifyUser(Long userId, UcsUser ucsUser) throws UserNotFoundException, UserNameExistsException;
+
+    boolean exists(Long Id, String username);
+
+    void modifyUserPassword(Long userId, ModifyPasswordRequest modifyPasswordRequest) throws UserPasswordException;
+
+    UcsUserVO getUserAndRoleById(Long userId);
+
+    PageResponse pagingUser(Integer page, Integer size, String name);
+
+    UserDetail getUserDetailsByUserName(String username);
+
+    void removeUserById(Long userId);
+}
