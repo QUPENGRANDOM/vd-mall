@@ -36,7 +36,7 @@ public class PageResponse {
         return response;
     }
 
-    public static PageResponse build (IPage<Object> pageData){
+    public static PageResponse build (IPage<?> pageData){
         return build(pageData,true);
     }
 }

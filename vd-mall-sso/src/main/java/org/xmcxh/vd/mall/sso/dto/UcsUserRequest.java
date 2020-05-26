@@ -3,8 +3,8 @@ package org.xmcxh.vd.mall.sso.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.xmcxh.vd.mall.sso.modle.StatusType;
 import org.xmcxh.vd.mall.sso.modle.UcsUser;
-import org.xmcxh.vd.mall.sso.modle.UcsUserStatus;
 
 /**
  * Created by pengq on 2020/5/12 14:50.
@@ -25,7 +25,7 @@ public class UcsUserRequest {
     private String address;
 
     @ApiModelProperty("用户状态 ENABLED-启用 DISABLED-禁用，默认启用")
-    private UcsUserStatus status = UcsUserStatus.ENABLED;
+    private StatusType status = StatusType.ENABLED;
 
     @ApiModelProperty("角色Id")
     private Long roleId;

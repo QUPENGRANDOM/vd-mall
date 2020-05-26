@@ -25,7 +25,7 @@ public class UcsUser {
 
     private String address;
 
-    private UcsUserStatus status;
+    private StatusType status;
 
     @TableField("role_id")
     private Long roleId;

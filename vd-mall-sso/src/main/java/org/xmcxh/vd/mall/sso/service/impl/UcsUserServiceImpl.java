@@ -7,10 +7,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.xmcxh.vd.mall.sso.exception.UserNameExistsException;
@@ -23,7 +19,6 @@ import org.xmcxh.vd.mall.sso.repository.UcsRoleRepository;
 import org.xmcxh.vd.mall.sso.repository.UcsUserRepository;
 import org.xmcxh.vd.mall.sso.service.UcsUserService;
 import org.xmcxh.vd.mall.sso.vo.UcsUserVO;
-import org.xmcxh.vd.mall.sso.security.UserDetail;
 import vd.mall.response.PageResponse;
 
 import java.util.ArrayList;
@@ -43,14 +38,14 @@ public class UcsUserServiceImpl implements UcsUserService {
     @Autowired
     UcsRoleRepository ucsRoleRepository;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+//    @Autowired
+//    PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
     public void createUser(UcsUser ucsUser) {
-        String password = passwordEncoder.encode(ucsUser.getPassword());
-        ucsUser.setPassword(password);
+//        String password = passwordEncoder.encode(ucsUser.getPassword());
+//        ucsUser.setPassword(password);
         ucsUserRepository.insert(ucsUser);
     }
 
@@ -92,9 +87,9 @@ public class UcsUserServiceImpl implements UcsUserService {
         }
 
         UcsUser ucsUser = ucsUserRepository.selectById(userId);
-        if (passwordEncoder.matches(ucsUser.getPassword(), modifyPasswordRequest.getOldPassword())) {
-            throw new UserPasswordException("用户输入的原始密码不正确");
-        }
+//        if (passwordEncoder.matches(ucsUser.getPassword(), modifyPasswordRequest.getOldPassword())) {
+//            throw new UserPasswordException("用户输入的原始密码不正确");
+//        }
 
         ucsUser.setPassword(modifyPasswordRequest.getPassword());
 
@@ -135,27 +130,21 @@ public class UcsUserServiceImpl implements UcsUserService {
         return pageResponse;
     }
 
-    @Override
-    public UserDetail getUserDetailsByUserName(String username) {
-        LambdaQueryWrapper<UcsUser> queryUserWrapper = Wrappers.<UcsUser>lambdaQuery().eq(UcsUser::getUsername, username);
-        UcsUser ucsUser = ucsUserRepository.selectOne(queryUserWrapper);
-        if (ucsUser == null) {
-            return null;
-        }
-
-        LambdaQueryWrapper<UcsRole> queryRoleWrapper = Wrappers.<UcsRole>lambdaQuery().eq(UcsRole::getId, ucsUser.getRoleId());
-        List<UcsRole> roles = ucsRoleRepository.selectList(queryRoleWrapper);
-        return new UserDetail(ucsUser, roles);
-    }
+//    @Override
+//    public UserDetail getUserDetailsByUserName(String username) {
+//        LambdaQueryWrapper<UcsUser> queryUserWrapper = Wrappers.<UcsUser>lambdaQuery().eq(UcsUser::getUsername, username);
+//        UcsUser ucsUser = ucsUserRepository.selectOne(queryUserWrapper);
+//        if (ucsUser == null) {
+//            return null;
+//        }
+//
+//        LambdaQueryWrapper<UcsRole> queryRoleWrapper = Wrappers.<UcsRole>lambdaQuery().eq(UcsRole::getId, ucsUser.getRoleId());
+//        List<UcsRole> roles = ucsRoleRepository.selectList(queryRoleWrapper);
+//        return new UserDetail(ucsUser, roles);
+//    }
 
     @Override
     public void removeUserById(Long userId) {
          ucsUserRepository.deleteById(userId);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(PasswordEncoder.class)
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
     }
 }

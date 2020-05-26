@@ -6,21 +6,18 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.util.Date;
-
-@TableName("ucs_role")
+/**
+ * Created by pengq on 2020/5/26 13:30.
+ */
 @Data
-public class UcsRole {
+@TableName("ucs_user_role_relation")
+public class UcsUserRoleRelation {
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    @TableField("role_name")
-    private String roleName;
+    @TableField("user_id")
+    private Long userId;
 
-    private StatusType status;
-
-    private String description;
-
-    @TableField("create_time")
-    private Date createTime;
+    @TableField("role_id")
+    private Long roleId;
 }

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 import lombok.Getter;
 
 @Getter
-public enum UcsUserStatus {
+public enum StatusType {
     DISABLED(0, "禁用"),
     ENABLED(1, "启用");
 
@@ -12,7 +12,7 @@ public enum UcsUserStatus {
     private Integer code;
     private String description;
 
-    UcsUserStatus(Integer code, String description) {
+    StatusType(Integer code, String description) {
         this.code = code;
         this.description = description;
     }
