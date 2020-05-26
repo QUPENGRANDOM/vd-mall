@@ -14,7 +14,6 @@ CREATE TABLE IF NOT EXISTS `ucs_user`
     `telephone`       VARCHAR(45)  NULL COMMENT '电话',
     `address`         VARCHAR(45)  NULL COMMENT '所属地',
     `status`          TINYINT(4)   NULL     DEFAULT 0 COMMENT '状态 0-禁用 1-启用',
-    `role_id`         INT          NOT NULL COMMENT '角色Id',
     `last_login_time` TIMESTAMP    NULL     DEFAULT NULL COMMENT '最后登录时间',
     `create_time`     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)

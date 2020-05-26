@@ -27,9 +27,6 @@ public class UcsUser {
 
     private StatusType status;
 
-    @TableField("role_id")
-    private Long roleId;
-
     @TableField("last_login_time")
     private Date lastLoginTime;
 

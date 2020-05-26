@@ -1,6 +1,7 @@
 package org.xmcxh.vd.mall.sso.service;
 
 import org.xmcxh.vd.mall.sso.dto.ModifyPasswordRequest;
+import org.xmcxh.vd.mall.sso.dto.UcsUserRequest;
 import org.xmcxh.vd.mall.sso.exception.UserNameExistsException;
 import org.xmcxh.vd.mall.sso.exception.UserNotFoundException;
 import org.xmcxh.vd.mall.sso.exception.UserPasswordException;
@@ -13,7 +14,7 @@ import vd.mall.response.PageResponse;
  */
 public interface UcsUserService {
 
-    void createUser(UcsUser ucsUser);
+    void createUser(UcsUserRequest ucsUser);
 
     void modifyUser(Long userId, UcsUser ucsUser) throws UserNotFoundException, UserNameExistsException;
 

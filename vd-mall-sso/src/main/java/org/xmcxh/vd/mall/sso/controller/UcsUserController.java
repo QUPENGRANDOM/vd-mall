@@ -27,7 +27,7 @@ public class UcsUserController {
     @ApiOperation(value = "添加用户")
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     public RestResponse addUser(@RequestBody UcsUserRequest ucsUserRequest) {
-        ucsUserService.createUser(ucsUserRequest.transfer());
+        ucsUserService.createUser(ucsUserRequest);
         return new SuccessResponse();
     }
 

@@ -6,6 +6,8 @@ import lombok.Data;
 import org.xmcxh.vd.mall.sso.modle.StatusType;
 import org.xmcxh.vd.mall.sso.modle.UcsUser;
 
+import java.util.List;
+
 /**
  * Created by pengq on 2020/5/12 14:50.
  */
@@ -28,7 +30,7 @@ public class UcsUserRequest {
     private StatusType status = StatusType.ENABLED;
 
     @ApiModelProperty("角色Id")
-    private Long roleId;
+    private List<Long> roleIdList;
 
     public UcsUser transfer() {
         UcsUser ucsUser = new UcsUser();
@@ -37,7 +39,6 @@ public class UcsUserRequest {
         ucsUser.setPassword(password);
         ucsUser.setAddress(address);
         ucsUser.setStatus(status);
-        ucsUser.setRoleId(roleId);
         return ucsUser;
     }
 }

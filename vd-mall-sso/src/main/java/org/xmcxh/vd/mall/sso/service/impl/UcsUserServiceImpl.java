@@ -9,14 +9,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.xmcxh.vd.mall.sso.dto.UcsUserRequest;
 import org.xmcxh.vd.mall.sso.exception.UserNameExistsException;
 import org.xmcxh.vd.mall.sso.exception.UserNotFoundException;
 import org.xmcxh.vd.mall.sso.exception.UserPasswordException;
 import org.xmcxh.vd.mall.sso.dto.ModifyPasswordRequest;
 import org.xmcxh.vd.mall.sso.modle.UcsRole;
 import org.xmcxh.vd.mall.sso.modle.UcsUser;
+import org.xmcxh.vd.mall.sso.modle.UcsUserRoleRelation;
 import org.xmcxh.vd.mall.sso.repository.UcsRoleRepository;
 import org.xmcxh.vd.mall.sso.repository.UcsUserRepository;
+import org.xmcxh.vd.mall.sso.repository.UcsUserRoleRelationRepository;
 import org.xmcxh.vd.mall.sso.service.UcsUserService;
 import org.xmcxh.vd.mall.sso.vo.UcsUserVO;
 import vd.mall.response.PageResponse;
@@ -38,15 +41,29 @@ public class UcsUserServiceImpl implements UcsUserService {
     @Autowired
     UcsRoleRepository ucsRoleRepository;
 
+    @Autowired
+    UcsUserRoleRelationRepository ucsUserRoleRelationRepository;
 //    @Autowired
 //    PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
-    public void createUser(UcsUser ucsUser) {
+    public void createUser(UcsUserRequest ucsUserRequest) {
 //        String password = passwordEncoder.encode(ucsUser.getPassword());
 //        ucsUser.setPassword(password);
+        UcsUser ucsUser = ucsUserRequest.transfer();
+        ucsUser.setPassword(ucsUserRequest.getPassword());
         ucsUserRepository.insert(ucsUser);
+
+        List<Long> roleIdList = ucsUserRequest.getRoleIdList();
+        if (roleIdList != null && !roleIdList.isEmpty()) {
+            UcsUserRoleRelation relation = new UcsUserRoleRelation();
+            for (Long roleId : roleIdList) {
+                relation.setRoleId(roleId);
+                relation.setUserId(ucsUser.getId());
+                ucsUserRoleRelationRepository.insert(relation);
+            }
+        }
     }
 
     @Override
@@ -99,9 +116,17 @@ public class UcsUserServiceImpl implements UcsUserService {
     @Override
     public UcsUserVO getUserAndRoleById(Long userId) {
         UcsUser ucsUser = ucsUserRepository.selectById(userId);
-        UcsRole ucsRole = ucsRoleRepository.selectById(ucsUser.getRoleId());
+
+        Wrapper<UcsUserRoleRelation> wrapper = Wrappers.<UcsUserRoleRelation>lambdaQuery().eq(UcsUserRoleRelation::getUserId, userId);
+        List<UcsUserRoleRelation> ucsUserRoleRelations = ucsUserRoleRelationRepository.selectList(wrapper);
         UcsUserVO vo = UcsUserVO.build(ucsUser);
-        vo.setRoleName(ucsRole.getRoleName());
+        if (ucsUserRoleRelations != null && !ucsUserRoleRelations.isEmpty()) {
+            List<Long> roleIds = ucsUserRoleRelations.stream().map(UcsUserRoleRelation::getRoleId).collect(Collectors.toList());
+            List<UcsRole> ucsRoles = ucsRoleRepository.selectBatchIds(roleIds);
+            List<String> names = ucsRoles.stream().map(UcsRole::getRoleName).collect(Collectors.toList());
+            vo.setRoleNames(names);
+        }
+
         return vo;
     }
 
@@ -119,8 +144,18 @@ public class UcsUserServiceImpl implements UcsUserService {
         Map<Long, String> roleMap = roles.stream().collect(Collectors.toMap(UcsRole::getId, UcsRole::getRoleName, (k1, k2) -> k1));
 
         for (UcsUser record : pageData.getRecords()) {
+            Wrapper<UcsUserRoleRelation> queryWrapper = Wrappers.<UcsUserRoleRelation>lambdaQuery().eq(UcsUserRoleRelation::getUserId, record.getId());
+            List<UcsUserRoleRelation> ucsUserRoleRelations = ucsUserRoleRelationRepository.selectList(queryWrapper);
             UcsUserVO vo = UcsUserVO.build(record);
-            vo.setRoleName(roleMap.getOrDefault(vo.getRoleId(), ""));
+            if (ucsUserRoleRelations != null && !ucsUserRoleRelations.isEmpty()) {
+                List<Long> roleIds = ucsUserRoleRelations.stream().map(UcsUserRoleRelation::getRoleId).collect(Collectors.toList());
+                List<String> roleIdList = new ArrayList<>();
+                for (Long roleId : roleIds) {
+                    roleIdList.add(roleMap.getOrDefault(roleId,""));
+                }
+                vo.setRoleNames(roleIdList);
+            }
+
             vos.add(vo);
         }
 
@@ -145,6 +180,6 @@ public class UcsUserServiceImpl implements UcsUserService {
 
     @Override
     public void removeUserById(Long userId) {
-         ucsUserRepository.deleteById(userId);
+        ucsUserRepository.deleteById(userId);
     }
 }
