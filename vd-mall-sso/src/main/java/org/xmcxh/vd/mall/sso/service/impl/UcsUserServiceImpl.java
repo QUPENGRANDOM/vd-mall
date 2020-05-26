@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.xmcxh.vd.mall.sso.dto.UcsUserRequest;
@@ -43,16 +44,15 @@ public class UcsUserServiceImpl implements UcsUserService {
 
     @Autowired
     UcsUserRoleRelationRepository ucsUserRoleRelationRepository;
-//    @Autowired
-//    PasswordEncoder passwordEncoder;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
     public void createUser(UcsUserRequest ucsUserRequest) {
-//        String password = passwordEncoder.encode(ucsUser.getPassword());
-//        ucsUser.setPassword(password);
         UcsUser ucsUser = ucsUserRequest.transfer();
-        ucsUser.setPassword(ucsUserRequest.getPassword());
+        ucsUser.setPassword(passwordEncoder.encode(ucsUserRequest.getPassword()));
         ucsUserRepository.insert(ucsUser);
 
         List<Long> roleIdList = ucsUserRequest.getRoleIdList();

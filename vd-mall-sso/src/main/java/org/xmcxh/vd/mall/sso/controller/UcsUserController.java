@@ -31,6 +31,12 @@ public class UcsUserController {
         return new SuccessResponse();
     }
 
+    @ApiOperation(value = "登录")
+    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public RestResponse login(@RequestBody UcsUserRequest ucsUserRequest) {
+        return new SuccessResponse();
+    }
+
     @ApiOperation(value = "修改用户")
     @PutMapping(value = "/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public RestResponse modifyUser(@PathVariable("userId") Long userId,
@@ -40,7 +46,7 @@ public class UcsUserController {
     }
 
     @ApiOperation(value = "获取用户")
-    @GetMapping(value = "/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public RestResponse getUser(@PathVariable("userId") Long userId) {
         UcsUserVO res = ucsUserService.getUserAndRoleById(userId);
         return new SuccessResponse().withData(res);

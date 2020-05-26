@@ -7,6 +7,8 @@
         <module>vd-mall-admin</module>
         <module>vd-mall-response</module>
         <module>vd-mall-sso</module>
+        <module>vd-mall-starter-jwt</module>
+        <module>vd-mall-starter-permission</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

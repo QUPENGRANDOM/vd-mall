@@ -37,7 +37,7 @@ public class JsonDeserializer extends com.fasterxml.jackson.databind.JsonDeseria
         return parser;
     }
 
-    private class ResponseParser extends GenericResponse {
+    private static class ResponseParser extends GenericResponse {
         ResponseParser(int code, String message) {
             super(code, message);
         }
