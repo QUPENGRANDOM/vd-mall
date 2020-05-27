@@ -6,6 +6,7 @@ import org.xmcxh.vd.mall.sso.exception.UserNameExistsException;
 import org.xmcxh.vd.mall.sso.exception.UserNotFoundException;
 import org.xmcxh.vd.mall.sso.exception.UserPasswordException;
 import org.xmcxh.vd.mall.sso.modle.UcsUser;
+import org.xmcxh.vd.mall.sso.security.UserDetail;
 import org.xmcxh.vd.mall.sso.vo.UcsUserVO;
 import vd.mall.response.PageResponse;
 
@@ -26,7 +27,7 @@ public interface UcsUserService {
 
     PageResponse pagingUser(Integer page, Integer size, String name);
 
-//    UserDetail getUserDetailsByUserName(String username);
+    UserDetail getUserDetailsByUserName(String username);
 
     void removeUserById(Long userId);
 }

@@ -21,6 +21,7 @@ import org.xmcxh.vd.mall.sso.modle.UcsUserRoleRelation;
 import org.xmcxh.vd.mall.sso.repository.UcsRoleRepository;
 import org.xmcxh.vd.mall.sso.repository.UcsUserRepository;
 import org.xmcxh.vd.mall.sso.repository.UcsUserRoleRelationRepository;
+import org.xmcxh.vd.mall.sso.security.UserDetail;
 import org.xmcxh.vd.mall.sso.service.UcsUserService;
 import org.xmcxh.vd.mall.sso.vo.UcsUserVO;
 import vd.mall.response.PageResponse;
@@ -165,18 +166,18 @@ public class UcsUserServiceImpl implements UcsUserService {
         return pageResponse;
     }
 
-//    @Override
-//    public UserDetail getUserDetailsByUserName(String username) {
-//        LambdaQueryWrapper<UcsUser> queryUserWrapper = Wrappers.<UcsUser>lambdaQuery().eq(UcsUser::getUsername, username);
-//        UcsUser ucsUser = ucsUserRepository.selectOne(queryUserWrapper);
-//        if (ucsUser == null) {
-//            return null;
-//        }
-//
-//        LambdaQueryWrapper<UcsRole> queryRoleWrapper = Wrappers.<UcsRole>lambdaQuery().eq(UcsRole::getId, ucsUser.getRoleId());
-//        List<UcsRole> roles = ucsRoleRepository.selectList(queryRoleWrapper);
-//        return new UserDetail(ucsUser, roles);
-//    }
+    @Override
+    public UserDetail getUserDetailsByUserName(String username) {
+        LambdaQueryWrapper<UcsUser> queryUserWrapper = Wrappers.<UcsUser>lambdaQuery().eq(UcsUser::getUsername, username);
+        UcsUser ucsUser = ucsUserRepository.selectOne(queryUserWrapper);
+        if (ucsUser == null) {
+            return null;
+        }
+
+        LambdaQueryWrapper<UcsRole> queryRoleWrapper =null;
+        List<UcsRole> roles = ucsRoleRepository.selectList(queryRoleWrapper);
+        return new UserDetail(ucsUser, roles);
+    }
 
     @Override
     public void removeUserById(Long userId) {

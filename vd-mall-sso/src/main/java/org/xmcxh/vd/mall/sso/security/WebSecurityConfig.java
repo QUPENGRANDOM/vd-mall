@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.xmcxh.boot.permission.DynamicSecurityService;
 import org.xmcxh.boot.permission.SecurityConfig;
+import org.xmcxh.vd.mall.sso.service.UcsUserService;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -26,6 +27,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WebSecurityConfig extends SecurityConfig {
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    UcsUserService ucsUserService;
 
     @Bean
     public UserDetailsService userDetailsService() {

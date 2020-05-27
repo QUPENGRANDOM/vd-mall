@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.xmcxh.vd.mall.sso.dto.LoginRequest;
 import org.xmcxh.vd.mall.sso.exception.GeneralException;
 import org.xmcxh.vd.mall.sso.dto.ModifyPasswordRequest;
 import org.xmcxh.vd.mall.sso.dto.UcsUserRequest;
@@ -33,7 +34,7 @@ public class UcsUserController {
 
     @ApiOperation(value = "登录")
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public RestResponse login(@RequestBody UcsUserRequest ucsUserRequest) {
+    public RestResponse login(@RequestBody LoginRequest loginRequest) {
         return new SuccessResponse();
     }
 
