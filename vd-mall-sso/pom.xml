@@ -43,6 +43,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.1.22</version>
+        </dependency>
+        <dependency>
             <groupId>com.vd.mall</groupId>
             <artifactId>vd-mall-response</artifactId>
             <version>0.0.1-SNAPSHOT</version>

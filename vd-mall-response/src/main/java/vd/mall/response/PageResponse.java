@@ -15,6 +15,7 @@ public class PageResponse {
     private Long totalPage;
     private Long total;
     private List<?> list;
+    private int code = 200;
 
     private PageResponse() {
     }

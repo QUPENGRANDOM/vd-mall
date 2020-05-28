@@ -27,6 +27,8 @@ public class UcsUser {
 
     private StatusType status;
 
+    private String avatar;
+
     @TableField("last_login_time")
     private Date lastLoginTime;
 

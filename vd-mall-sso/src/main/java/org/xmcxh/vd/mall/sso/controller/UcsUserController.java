@@ -35,7 +35,7 @@ public class UcsUserController {
     @ApiOperation(value = "登录")
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public RestResponse login(@RequestBody LoginRequest loginRequest) {
-        return new SuccessResponse();
+        return new SuccessResponse().withData("afafasfasdasd");
     }
 
     @ApiOperation(value = "修改用户")
@@ -67,7 +67,7 @@ public class UcsUserController {
         ucsUserService.removeUserById(userId);
         return new SuccessResponse();
     }
-
+    @ApiOperation(value = "用户分页")
     @GetMapping(value = "/paging", produces = MediaType.APPLICATION_JSON_VALUE)
     public PageResponse pagingRole(@RequestParam("page") Integer page,
                                    @RequestParam("size") Integer size,
