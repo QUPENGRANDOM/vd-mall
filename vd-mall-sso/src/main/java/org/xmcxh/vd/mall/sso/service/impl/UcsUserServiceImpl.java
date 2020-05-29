@@ -15,6 +15,7 @@ import org.xmcxh.vd.mall.sso.exception.UserNameExistsException;
 import org.xmcxh.vd.mall.sso.exception.UserNotFoundException;
 import org.xmcxh.vd.mall.sso.exception.UserPasswordException;
 import org.xmcxh.vd.mall.sso.dto.ModifyPasswordRequest;
+import org.xmcxh.vd.mall.sso.modle.StatusType;
 import org.xmcxh.vd.mall.sso.modle.UcsRole;
 import org.xmcxh.vd.mall.sso.modle.UcsUser;
 import org.xmcxh.vd.mall.sso.modle.UcsUserRoleRelation;
@@ -110,6 +111,23 @@ public class UcsUserServiceImpl implements UcsUserService {
 //        }
 
         ucsUser.setPassword(modifyPasswordRequest.getPassword());
+
+        ucsUserRepository.updateById(ucsUser);
+    }
+
+    @Override
+    public void modifyUserStatus(Long userId, StatusType statusType) {
+        UcsUser ucsUser = ucsUserRepository.selectById(userId);
+        if (ucsUser == null){
+            log.warn("未找到该用户：{}",userId);
+            return;
+        }
+
+        if (ucsUser.getStatus() == statusType){
+            return;
+        }
+
+        ucsUser.setStatus(statusType);
 
         ucsUserRepository.updateById(ucsUser);
     }

@@ -9,6 +9,7 @@ import org.xmcxh.vd.mall.sso.dto.LoginRequest;
 import org.xmcxh.vd.mall.sso.exception.GeneralException;
 import org.xmcxh.vd.mall.sso.dto.ModifyPasswordRequest;
 import org.xmcxh.vd.mall.sso.dto.UcsUserRequest;
+import org.xmcxh.vd.mall.sso.modle.StatusType;
 import org.xmcxh.vd.mall.sso.service.UcsUserService;
 import org.xmcxh.vd.mall.sso.vo.UcsUserVO;
 import vd.mall.response.PageResponse;
@@ -61,12 +62,27 @@ public class UcsUserController {
         return new SuccessResponse();
     }
 
+    @ApiOperation(value = "用户禁用")
+    @PutMapping(value = "/{userId}/disabled", produces = MediaType.APPLICATION_JSON_VALUE)
+    public RestResponse modifyUserStatusDisabled(@PathVariable("userId") Long userId) {
+        ucsUserService.modifyUserStatus(userId, StatusType.DISABLED);
+        return new SuccessResponse();
+    }
+
+    @ApiOperation(value = "用户启用")
+    @PutMapping(value = "/{userId}/enabled", produces = MediaType.APPLICATION_JSON_VALUE)
+    public RestResponse modifyUserStatusEnabled(@PathVariable("userId") Long userId) {
+        ucsUserService.modifyUserStatus(userId, StatusType.DISABLED);
+        return new SuccessResponse();
+    }
+
     @ApiOperation(value = "删除用户")
     @DeleteMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public RestResponse removeUser(@PathVariable("userId") Long userId){
+    public RestResponse removeUser(@PathVariable("userId") Long userId) {
         ucsUserService.removeUserById(userId);
         return new SuccessResponse();
     }
+
     @ApiOperation(value = "用户分页")
     @GetMapping(value = "/paging", produces = MediaType.APPLICATION_JSON_VALUE)
     public PageResponse pagingRole(@RequestParam("page") Integer page,
