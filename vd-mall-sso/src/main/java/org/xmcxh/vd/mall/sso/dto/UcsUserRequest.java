@@ -3,6 +3,7 @@ package org.xmcxh.vd.mall.sso.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.xmcxh.vd.mall.sso.modle.SexType;
 import org.xmcxh.vd.mall.sso.modle.StatusType;
 import org.xmcxh.vd.mall.sso.modle.UcsUser;
 
@@ -23,8 +24,17 @@ public class UcsUserRequest {
     @ApiModelProperty("显示名")
     private String nickname;
 
+    @ApiModelProperty("性别")
+    private SexType sex;
+
     @ApiModelProperty("所属地")
     private String address;
+
+    @ApiModelProperty("邮箱")
+    private String mail;
+
+    @ApiModelProperty("手机")
+    private String telephone;
 
     @ApiModelProperty("用户状态 ENABLED-启用 DISABLED-禁用，默认启用")
     private StatusType status = StatusType.ENABLED;
@@ -39,6 +49,9 @@ public class UcsUserRequest {
         ucsUser.setPassword(password);
         ucsUser.setAddress(address);
         ucsUser.setStatus(status);
+        ucsUser.setMail(mail);
+        ucsUser.setTelephone(telephone);
+        ucsUser.setSex(sex);
         return ucsUser;
     }
 }

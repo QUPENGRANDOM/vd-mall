@@ -72,7 +72,7 @@ public class UcsUserController {
     @ApiOperation(value = "用户启用")
     @PutMapping(value = "/{userId}/enabled", produces = MediaType.APPLICATION_JSON_VALUE)
     public RestResponse modifyUserStatusEnabled(@PathVariable("userId") Long userId) {
-        ucsUserService.modifyUserStatus(userId, StatusType.DISABLED);
+        ucsUserService.modifyUserStatus(userId, StatusType.ENABLED);
         return new SuccessResponse();
     }
 
@@ -85,7 +85,7 @@ public class UcsUserController {
 
     @ApiOperation(value = "用户分页")
     @GetMapping(value = "/paging", produces = MediaType.APPLICATION_JSON_VALUE)
-    public PageResponse pagingRole(@RequestParam("page") Integer page,
+    public PageResponse pagingUser(@RequestParam("page") Integer page,
                                    @RequestParam("size") Integer size,
                                    @RequestParam(value = "username", required = false) String name) {
         return ucsUserService.pagingUser(page, size, name);
