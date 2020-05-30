@@ -83,12 +83,9 @@ public class UcsUserServiceImpl implements UcsUserService {
             throw new UserNameExistsException("用户名已存在:" + ucsUser.getUsername());
         }
 
-        user.setNickname(ucsUser.getNickname());
-        user.setStatus(ucsUser.getStatus());
-        user.setUsername(ucsUser.getUsername());
-        user.setId(userId);
+        ucsUser.setId(userId);
 
-        ucsUserRepository.updateById(user);
+        ucsUserRepository.updateById(ucsUser);
     }
 
     @Override
@@ -144,6 +141,7 @@ public class UcsUserServiceImpl implements UcsUserService {
             List<UcsRole> ucsRoles = ucsRoleRepository.selectBatchIds(roleIds);
             List<String> names = ucsRoles.stream().map(UcsRole::getRoleName).collect(Collectors.toList());
             vo.setRoleNames(names);
+            vo.setRoleIds(roleIds);
         }
 
         return vo;
@@ -173,6 +171,7 @@ public class UcsUserServiceImpl implements UcsUserService {
                     roleIdList.add(roleMap.getOrDefault(roleId,""));
                 }
                 vo.setRoleNames(roleIdList);
+                vo.setRoleIds(roleIds);
             }
 
             vos.add(vo);

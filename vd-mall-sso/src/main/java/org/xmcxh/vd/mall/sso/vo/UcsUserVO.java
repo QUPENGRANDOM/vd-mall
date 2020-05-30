@@ -16,6 +16,7 @@ import java.util.List;
 @ToString(callSuper = true)
 public class UcsUserVO extends UcsUser {
     private List<String> roleNames;
+    private List<Long> roleIds;
 
     public static UcsUserVO build(UcsUser ucsUser) {
         UcsUserVO vo = new UcsUserVO();
