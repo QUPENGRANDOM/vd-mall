@@ -93,7 +93,8 @@ public class UcsUserController {
 
     @ApiOperation(value = "重置密码")
     @PostMapping(value = "/{userId}/reset", produces = MediaType.APPLICATION_JSON_VALUE)
-    public PageResponse restPassword(@PathVariable("userId") Long userId) {
-        return ucsUserService.restPassword(userId);
+    public RestResponse restPassword(@PathVariable("userId") Long userId) {
+        ucsUserService.restPassword(userId);
+        return new SuccessResponse();
     }
 }
