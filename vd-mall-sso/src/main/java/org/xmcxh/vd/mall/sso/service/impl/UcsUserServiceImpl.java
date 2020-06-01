@@ -5,12 +5,22 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.xmcxh.boot.jwt.JwtTokenProvider;
+import org.xmcxh.boot.jwt.TokenProvider;
+import org.xmcxh.vd.mall.sso.dto.LoginRequest;
 import org.xmcxh.vd.mall.sso.dto.UcsUserRequest;
 import org.xmcxh.vd.mall.sso.exception.UserNameExistsException;
 import org.xmcxh.vd.mall.sso.exception.UserNotFoundException;
@@ -50,6 +60,9 @@ public class UcsUserServiceImpl implements UcsUserService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    TokenProvider tokenProvider;
 
     @Override
     @Transactional
@@ -185,11 +198,11 @@ public class UcsUserServiceImpl implements UcsUserService {
     }
 
     @Override
-    public UserDetail getUserDetailsByUserName(String username) {
+    public UserDetail getUserDetailsByUserName(String username) throws UsernameNotFoundException {
         LambdaQueryWrapper<UcsUser> queryUserWrapper = Wrappers.<UcsUser>lambdaQuery().eq(UcsUser::getUsername, username);
         UcsUser ucsUser = ucsUserRepository.selectOne(queryUserWrapper);
         if (ucsUser == null) {
-            return null;
+            throw new UsernameNotFoundException("Not found username:" + username);
         }
 
         LambdaQueryWrapper<UcsRole> queryRoleWrapper = null;
@@ -210,5 +223,26 @@ public class UcsUserServiceImpl implements UcsUserService {
         ucsUserRepository.updateById(ucsUser);
         // TODO: 2020/6/1 send the password to mail
         log.debug("Password:{}", password);
+    }
+
+    @Override
+    public String login(LoginRequest loginRequest) {
+        UserDetails userDetails = this.getUserDetailsByUserName(loginRequest.getUsername());
+        if (!passwordEncoder.matches(loginRequest.getPassword(), userDetails.getPassword())) {
+            throw new BadCredentialsException("密码不正确");
+        }
+
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return tokenProvider.issue(userDetails.getUsername());
+    }
+
+    @Override
+    public UcsUserVO getUserByToken(String token) {
+        Claims claims = tokenProvider.decode(token);
+        String username = claims.getSubject();
+        LambdaQueryWrapper<UcsUser> queryUserWrapper = Wrappers.<UcsUser>lambdaQuery().eq(UcsUser::getUsername, username);
+        UcsUser ucsUser = ucsUserRepository.selectOne(queryUserWrapper);
+        return this.getUserAndRoleById(ucsUser.getId());
     }
 }

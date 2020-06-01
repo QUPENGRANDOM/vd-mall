@@ -2,7 +2,6 @@ package org.xmcxh.boot.permission;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -50,7 +49,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling()
                 .accessDeniedHandler(restfulAccessDeniedHandler())
-                .authenticationEntryPoint(restAuthenticationEntryPoint())
                 // 自定义权限拦截器JWT过滤器
                 .and()
                 .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -88,11 +86,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public RestAuthenticationEntryPoint restAuthenticationEntryPoint() {
-        return new RestAuthenticationEntryPoint();
-    }
-
-    @Bean
     public IgnoreUrlsConfig ignoreUrlsConfig() {
         return new IgnoreUrlsConfig();
     }
@@ -102,7 +95,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public DynamicAccessDecisionManager dynamicAccessDecisionManager() {
         return new DynamicAccessDecisionManager();
     }
-
 
     @ConditionalOnBean(name = "dynamicSecurityService")
     @Bean

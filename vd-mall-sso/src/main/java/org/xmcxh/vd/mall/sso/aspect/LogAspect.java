@@ -41,6 +41,11 @@ public class LogAspect {
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
+
+        if (method.isAnnotationPresent(LogIgnore.class)) {
+            return joinPoint.proceed();
+        }
+
         LogInfo logInfo = new LogInfo();
         if (method.isAnnotationPresent(ApiOperation.class)) {
             ApiOperation operation = method.getAnnotation(ApiOperation.class);

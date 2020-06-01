@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.xmcxh.vd.mall.sso.aspect.LogIgnore;
 import org.xmcxh.vd.mall.sso.dto.LoginRequest;
 import org.xmcxh.vd.mall.sso.exception.GeneralException;
 import org.xmcxh.vd.mall.sso.dto.ModifyPasswordRequest;
@@ -36,7 +37,8 @@ public class UcsUserController {
     @ApiOperation(value = "登录")
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public RestResponse login(@RequestBody LoginRequest loginRequest) {
-        return new SuccessResponse().withData("afafasfasdasd");
+        String token = ucsUserService.login(loginRequest);
+        return new SuccessResponse().withData(token);
     }
 
     @ApiOperation(value = "修改用户")
@@ -47,7 +49,14 @@ public class UcsUserController {
         return new SuccessResponse();
     }
 
-    @ApiOperation(value = "获取用户")
+    @ApiOperation(value = "根据token获取用户")
+    @GetMapping(value = "/token", produces = MediaType.APPLICATION_JSON_VALUE)
+    public RestResponse getUserByToken(@RequestParam("token") String token) {
+        UcsUserVO res = ucsUserService.getUserByToken(token);
+        return new SuccessResponse().withData(res);
+    }
+
+    @ApiOperation(value = "根据Id获取用户")
     @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public RestResponse getUser(@PathVariable("userId") Long userId) {
         UcsUserVO res = ucsUserService.getUserAndRoleById(userId);

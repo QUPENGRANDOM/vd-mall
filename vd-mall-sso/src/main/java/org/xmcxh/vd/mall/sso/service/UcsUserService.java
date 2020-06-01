@@ -1,5 +1,7 @@
 package org.xmcxh.vd.mall.sso.service;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.xmcxh.vd.mall.sso.dto.LoginRequest;
 import org.xmcxh.vd.mall.sso.dto.ModifyPasswordRequest;
 import org.xmcxh.vd.mall.sso.dto.UcsUserRequest;
 import org.xmcxh.vd.mall.sso.exception.UserNameExistsException;
@@ -30,9 +32,13 @@ public interface UcsUserService {
 
     PageResponse pagingUser(Integer page, Integer size, String name);
 
-    UserDetail getUserDetailsByUserName(String username);
+    UserDetail getUserDetailsByUserName(String username) throws UsernameNotFoundException;
 
     void removeUserById(Long userId);
 
     void restPassword(Long userId);
+
+    String login(LoginRequest loginRequest);
+
+    UcsUserVO getUserByToken(String token);
 }
