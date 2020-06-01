@@ -1,6 +1,7 @@
 package org.xmcxh.vd.mall.sso.aspect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -10,12 +11,18 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.xmcxh.boot.jwt.TokenProvider;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
@@ -32,33 +39,54 @@ import java.util.Map;
 public class LogAspect {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    @Autowired
+    TokenProvider tokenProvider;
+
     @Pointcut("execution(public * org.xmcxh.vd.mall.sso.controller.*.*(..))")
     public void log() {
     }
 
     @Around("log()")
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
+        long startTime = System.currentTimeMillis();
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
-
-        if (method.isAnnotationPresent(LogIgnore.class)) {
-            return joinPoint.proceed();
-        }
 
         LogInfo logInfo = new LogInfo();
         if (method.isAnnotationPresent(ApiOperation.class)) {
             ApiOperation operation = method.getAnnotation(ApiOperation.class);
             logInfo.setOperation(operation.value());
         }
-//
-//        UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        logInfo.setUser(userDetail.getUsername());
+        RequestAttributes ra = RequestContextHolder.getRequestAttributes();
+        ServletRequestAttributes sra = (ServletRequestAttributes) ra;
+        if (sra != null){
+            HttpServletRequest request = sra.getRequest();
+            String authorization = request.getHeader(tokenProvider.getHeaderKey());
+            String authToken = authorization.substring(tokenProvider.getTokenHead().length());
+            Claims claims = tokenProvider.decode(authToken);
+            logInfo.setUser(claims.getSubject());
+        }
+
         Map<String, Object> params = parseParameters(method, joinPoint.getArgs());
         logInfo.setParams(params);
-        log.info("入口信息：{}", objectMapper.writeValueAsString(logInfo));
+        boolean input = false, output = false;
+        if (method.isAnnotationPresent(LogIgnore.class)) {
+            LogIgnore logIgnore = method.getAnnotation(LogIgnore.class);
+            input = logIgnore.input();
+            output = logIgnore.output();
+        }
+        if (!input) {
+            log.info("入口信息：{}", objectMapper.writeValueAsString(logInfo));
+        }
+
         Object result = joinPoint.proceed();
-        log.info("出口信息：{}", objectMapper.writeValueAsString(result));
+        log.debug("执行耗时：{}ms", System.currentTimeMillis() - startTime);
+
+        if (!output) {
+            log.info("出口信息：{}", objectMapper.writeValueAsString(result));
+        }
+
         return result;
     }
 
@@ -87,7 +115,7 @@ public class LogAspect {
     }
 
     @Data
-    private class LogInfo {
+    private static class LogInfo {
         private String operation;
         private String user;
         private Map<String, Object> params;
