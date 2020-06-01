@@ -33,4 +33,6 @@ public interface UcsUserService {
     UserDetail getUserDetailsByUserName(String username);
 
     void removeUserById(Long userId);
+
+    void restPassword(Long userId);
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -115,12 +116,12 @@ public class UcsUserServiceImpl implements UcsUserService {
     @Override
     public void modifyUserStatus(Long userId, StatusType statusType) {
         UcsUser ucsUser = ucsUserRepository.selectById(userId);
-        if (ucsUser == null){
-            log.warn("未找到该用户：{}",userId);
+        if (ucsUser == null) {
+            log.warn("未找到该用户：{}", userId);
             return;
         }
 
-        if (ucsUser.getStatus() == statusType){
+        if (ucsUser.getStatus() == statusType) {
             return;
         }
 
@@ -168,7 +169,7 @@ public class UcsUserServiceImpl implements UcsUserService {
                 List<Long> roleIds = ucsUserRoleRelations.stream().map(UcsUserRoleRelation::getRoleId).collect(Collectors.toList());
                 List<String> roleIdList = new ArrayList<>();
                 for (Long roleId : roleIds) {
-                    roleIdList.add(roleMap.getOrDefault(roleId,""));
+                    roleIdList.add(roleMap.getOrDefault(roleId, ""));
                 }
                 vo.setRoleNames(roleIdList);
                 vo.setRoleIds(roleIds);
@@ -191,7 +192,7 @@ public class UcsUserServiceImpl implements UcsUserService {
             return null;
         }
 
-        LambdaQueryWrapper<UcsRole> queryRoleWrapper =null;
+        LambdaQueryWrapper<UcsRole> queryRoleWrapper = null;
         List<UcsRole> roles = ucsRoleRepository.selectList(queryRoleWrapper);
         return new UserDetail(ucsUser, roles);
     }
@@ -199,5 +200,15 @@ public class UcsUserServiceImpl implements UcsUserService {
     @Override
     public void removeUserById(Long userId) {
         ucsUserRepository.deleteById(userId);
+    }
+
+    @Override
+    public void restPassword(Long userId) {
+        String password = RandomStringUtils.randomAlphabetic(8);
+        UcsUser ucsUser = ucsUserRepository.selectById(userId);
+        ucsUser.setPassword(passwordEncoder.encode(password));
+        ucsUserRepository.updateById(ucsUser);
+        // TODO: 2020/6/1 send the password to mail
+        log.debug("Password:{}", password);
     }
 }

@@ -90,4 +90,10 @@ public class UcsUserController {
                                    @RequestParam(value = "username", required = false) String name) {
         return ucsUserService.pagingUser(page, size, name);
     }
+
+    @ApiOperation(value = "重置密码")
+    @PostMapping(value = "/{userId}/reset", produces = MediaType.APPLICATION_JSON_VALUE)
+    public PageResponse restPassword(@PathVariable("userId") Long userId) {
+        return ucsUserService.restPassword(userId);
+    }
 }

@@ -18,6 +18,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.vd.mall</groupId>
             <artifactId>vd-mall-starter-permission</artifactId>
             <version>0.0.1-SNAPSHOT</version>
