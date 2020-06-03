@@ -60,12 +60,14 @@ public class LogAspect {
         }
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
         ServletRequestAttributes sra = (ServletRequestAttributes) ra;
-        if (sra != null){
+        if (sra != null) {
             HttpServletRequest request = sra.getRequest();
             String authorization = request.getHeader(tokenProvider.getHeaderKey());
-            String authToken = authorization.substring(tokenProvider.getTokenHead().length());
-            Claims claims = tokenProvider.decode(authToken);
-            logInfo.setUser(claims.getSubject());
+            if (authorization != null) {
+                String authToken = authorization.substring(tokenProvider.getTokenHead().length());
+                Claims claims = tokenProvider.decode(authToken);
+                logInfo.setUser(claims.getSubject());
+            }
         }
 
         Map<String, Object> params = parseParameters(method, joinPoint.getArgs());

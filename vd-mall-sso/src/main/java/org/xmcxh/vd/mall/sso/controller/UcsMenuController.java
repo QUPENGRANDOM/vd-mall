@@ -3,12 +3,10 @@ package org.xmcxh.vd.mall.sso.controller;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.xmcxh.vd.mall.sso.dto.UcsMenuRequest;
 import org.xmcxh.vd.mall.sso.service.UcsMenuService;
+import vd.mall.response.PageResponse;
 import vd.mall.response.RestResponse;
 import vd.mall.response.SuccessResponse;
 
@@ -28,5 +26,12 @@ public class UcsMenuController {
         return new SuccessResponse();
     }
 
-    
+    @ApiOperation("分页查询菜单")
+    @GetMapping(value = "/{parentId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public PageResponse pagingMenuByParent(@PathVariable(value = "parentId" ,required = false) Long parentId,
+                                           @RequestParam("page") Integer page,
+                                           @RequestParam("size") Integer size) {
+        return ucsMenuService.pagingMenus(page, size, parentId);
+    }
+
 }
