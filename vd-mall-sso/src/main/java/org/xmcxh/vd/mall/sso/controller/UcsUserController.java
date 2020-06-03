@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.xmcxh.vd.mall.sso.aspect.LogIgnore;
 import org.xmcxh.vd.mall.sso.dto.LoginRequest;
 import org.xmcxh.vd.mall.sso.exception.GeneralException;
 import org.xmcxh.vd.mall.sso.dto.ModifyPasswordRequest;
