@@ -22,4 +22,6 @@ public interface UcsRoleService {
     void deleteRoleById(Long roleId);
 
     void updateRole(Long roleId, UcsRoleRequest ucsRoleRequest);
+
+    void addMenus(Long roleId, List<Long> menuIds);
 }

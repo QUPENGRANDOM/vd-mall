@@ -46,8 +46,6 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
             code = GlobalResponseCode.LOGIN_FAILED_ERROR;
         }
         RestResponse response = new ErrorResponse(code);
-        log.debug("用户[{}]于[{}]登录失败,失败原因：[{}]", httpServletRequest.getParameter("username"), new Date(), response.getMessage());
-
         WriteResponse.write(httpServletResponse, response);
     }
 }

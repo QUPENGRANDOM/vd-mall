@@ -45,7 +45,7 @@ public class UcsRoleController {
     @GetMapping(value = "/{roleId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public RestResponse updateRole(@PathVariable Long roleId,
                                    @RequestBody UcsRoleRequest ucsRoleRequest) {
-        ucsRoleService.updateRole(roleId,ucsRoleRequest);
+        ucsRoleService.updateRole(roleId, ucsRoleRequest);
 
         return new SuccessResponse();
     }
@@ -61,6 +61,14 @@ public class UcsRoleController {
     @GetMapping(value = "/paging", produces = MediaType.APPLICATION_JSON_VALUE)
     public PageResponse pagingRole(@RequestParam("page") Integer page,
                                    @RequestParam("size") Integer size) {
-       return ucsRoleService.pagingRole(page,size);
+        return ucsRoleService.pagingRole(page, size);
+    }
+
+    @ApiOperation("为角色分配菜单")
+    @PostMapping(value = "/{roleId}/menus", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public RestResponse addMenus(@PathVariable("roleId") Long roleId,
+                                 @RequestBody List<Long> menuIds) {
+        ucsRoleService.addMenus(roleId,menuIds);
+        return new SuccessResponse();
     }
 }

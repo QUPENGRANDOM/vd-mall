@@ -28,7 +28,7 @@ public class UcsMenuController {
 
     @ApiOperation("分页查询菜单")
     @GetMapping(value = "/{parentId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public PageResponse pagingMenuByParent(@PathVariable(value = "parentId" ,required = false) Long parentId,
+    public PageResponse pagingMenuByParent(@PathVariable("parentId") Long parentId,
                                            @RequestParam("page") Integer page,
                                            @RequestParam("size") Integer size) {
         return ucsMenuService.pagingMenus(page, size, parentId);

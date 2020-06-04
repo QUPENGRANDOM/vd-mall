@@ -7,10 +7,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.xmcxh.vd.mall.sso.dto.UcsRoleRequest;
 import org.xmcxh.vd.mall.sso.modle.StatusType;
 import org.xmcxh.vd.mall.sso.modle.UcsRole;
+import org.xmcxh.vd.mall.sso.modle.UcsRoleMenuRelation;
 import org.xmcxh.vd.mall.sso.modle.UcsUserRoleRelation;
+import org.xmcxh.vd.mall.sso.repository.UcsRoleMenuRelationRepository;
 import org.xmcxh.vd.mall.sso.repository.UcsRoleRepository;
 import org.xmcxh.vd.mall.sso.repository.UcsUserRoleRelationRepository;
 import org.xmcxh.vd.mall.sso.service.UcsRoleService;
@@ -29,6 +32,9 @@ public class UcsRoleServiceImpl implements UcsRoleService {
 
     @Autowired
     UcsUserRoleRelationRepository ucsUserRoleRelationRepository;
+
+    @Autowired
+    UcsRoleMenuRelationRepository ucsRoleMenuRelationRepository;
 
     @Override
     public List<UcsRole> listRoleByStatus(StatusType enabled) {
@@ -88,5 +94,22 @@ public class UcsRoleServiceImpl implements UcsRoleService {
         ucsRole.setId(roleId);
 
         ucsRoleRepository.updateById(ucsRole);
+    }
+
+    @Override
+    @Transactional
+    public void addMenus(Long roleId, List<Long> menuIds) {
+        UcsRole ucsRole = ucsRoleRepository.selectById(roleId);
+        if (ucsRole == null){
+            return;
+        }
+
+        UcsRoleMenuRelation relation = new UcsRoleMenuRelation();
+
+        for (Long menuId : menuIds) {
+            relation.setMenuId(menuId);
+            relation.setRoleId(roleId);
+            ucsRoleMenuRelationRepository.insert(relation);
+        }
     }
 }

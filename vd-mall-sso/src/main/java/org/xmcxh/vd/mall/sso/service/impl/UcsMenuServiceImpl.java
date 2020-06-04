@@ -37,7 +37,7 @@ public class UcsMenuServiceImpl implements UcsMenuService {
     @Override
     public PageResponse pagingMenus(Integer page, Integer size, Long parentId) {
         Wrapper<UcsMenu> wrapper = Wrappers.<UcsMenu>lambdaQuery()
-                .eq(UcsMenu::getParentId, parentId == null ? 0 : parentId)
+                .eq(UcsMenu::getParentId, parentId)
                 .orderByAsc(UcsMenu::getSort)
                 .orderByDesc(UcsMenu::getCreateTime);
 
