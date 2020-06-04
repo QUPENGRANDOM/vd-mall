@@ -1,6 +1,7 @@
 package org.xmcxh.vd.mall.sso.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -19,7 +20,9 @@ import org.xmcxh.vd.mall.sso.repository.UcsUserRoleRelationRepository;
 import org.xmcxh.vd.mall.sso.service.UcsRoleService;
 import vd.mall.response.PageResponse;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by pengq on 2020/5/25 14:14.
@@ -100,7 +103,7 @@ public class UcsRoleServiceImpl implements UcsRoleService {
     @Transactional
     public void addMenus(Long roleId, List<Long> menuIds) {
         UcsRole ucsRole = ucsRoleRepository.selectById(roleId);
-        if (ucsRole == null){
+        if (ucsRole == null) {
             return;
         }
 
@@ -111,5 +114,15 @@ public class UcsRoleServiceImpl implements UcsRoleService {
             relation.setRoleId(roleId);
             ucsRoleMenuRelationRepository.insert(relation);
         }
+    }
+
+    @Override
+    public List<Long> getMenusByRoleId(Long roleId) {
+        LambdaQueryWrapper<UcsRoleMenuRelation> wrapper = Wrappers.<UcsRoleMenuRelation>lambdaQuery()
+                .eq(UcsRoleMenuRelation::getRoleId, roleId);
+        List<UcsRoleMenuRelation> ucsRoleMenuRelations = ucsRoleMenuRelationRepository.selectList(wrapper);
+
+        return ucsRoleMenuRelations == null || ucsRoleMenuRelations.isEmpty() ?
+                Collections.emptyList() : ucsRoleMenuRelations.stream().map(UcsRoleMenuRelation::getMenuId).collect(Collectors.toList());
     }
 }

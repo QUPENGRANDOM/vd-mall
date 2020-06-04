@@ -24,4 +24,6 @@ public interface UcsRoleService {
     void updateRole(Long roleId, UcsRoleRequest ucsRoleRequest);
 
     void addMenus(Long roleId, List<Long> menuIds);
+
+    List<Long> getMenusByRoleId(Long roleId);
 }

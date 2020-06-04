@@ -71,4 +71,11 @@ public class UcsRoleController {
         ucsRoleService.addMenus(roleId,menuIds);
         return new SuccessResponse();
     }
+
+    @ApiOperation("查询该角已经有的菜单")
+    @GetMapping(value = "/{roleId}/menus", produces= MediaType.APPLICATION_JSON_VALUE)
+    public RestResponse getMenus(@PathVariable("roleId") Long roleId) {
+        List<Long> roleIds = ucsRoleService.getMenusByRoleId(roleId);
+        return new SuccessResponse().withData(roleIds);
+    }
 }
