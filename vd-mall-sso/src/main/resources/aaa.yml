@@ -1,6 +1,0 @@
-ftp:
-  client:
-    host: 10.14.32.103
-    username: ftptest
-    password: Nuc#2140
-    passive-mode: true

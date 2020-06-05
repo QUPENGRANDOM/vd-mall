@@ -7,6 +7,8 @@ import org.xmcxh.vd.mall.sso.modle.SexType;
 import org.xmcxh.vd.mall.sso.modle.StatusType;
 import org.xmcxh.vd.mall.sso.modle.UcsUser;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -15,6 +17,7 @@ import java.util.List;
 @Data
 @ApiModel("用户请求实体")
 public class UcsUserRequest {
+    @NotBlank(message = "{username,not.null}")
     @ApiModelProperty("登录名")
     private String username;
 

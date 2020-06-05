@@ -3,6 +3,7 @@ package org.xmcxh.vd.mall.sso.validate;
 import org.hibernate.validator.HibernateValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.validation.beanvalidation.OptionalValidatorFactoryBean;
@@ -17,7 +18,7 @@ import javax.validation.ValidatorFactory;
 @Configuration
 public class ValidateConfig {
     @Bean
-    public MethodValidationPostProcessor methodValidationPostProcessor(){
+    public MethodValidationPostProcessor methodValidationPostProcessor() {
         MethodValidationPostProcessor postProcessor = new MethodValidationPostProcessor();
         postProcessor.setValidator(validator());
 
@@ -25,7 +26,17 @@ public class ValidateConfig {
     }
 
     @Bean
-    public Validator validator(){
-        return new OptionalValidatorFactoryBean();
+    public Validator validator() {
+        OptionalValidatorFactoryBean optionalValidatorFactoryBean = new OptionalValidatorFactoryBean();
+        optionalValidatorFactoryBean.setValidationMessageSource(getMessageSource());
+        return optionalValidatorFactoryBean;
     }
+
+    private ResourceBundleMessageSource getMessageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setBasenames("i18n/message");
+        return messageSource;
+    }
+
 }

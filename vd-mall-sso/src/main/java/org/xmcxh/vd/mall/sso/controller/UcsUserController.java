@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.xmcxh.vd.mall.sso.dto.LoginRequest;
 import org.xmcxh.vd.mall.sso.exception.GeneralException;
@@ -28,7 +29,7 @@ public class UcsUserController {
 
     @ApiOperation(value = "添加用户")
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public RestResponse addUser(@RequestBody UcsUserRequest ucsUserRequest) {
+    public RestResponse addUser(@RequestBody @Validated UcsUserRequest ucsUserRequest) {
         ucsUserService.createUser(ucsUserRequest);
         return new SuccessResponse();
     }
