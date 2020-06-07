@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,8 +67,11 @@ public class UcsRoleServiceImpl implements UcsRoleService {
     }
 
     @Override
-    public PageResponse pagingRole(Integer page, Integer size) {
-        Wrapper<UcsRole> wrapper = Wrappers.<UcsRole>lambdaQuery().orderByDesc(UcsRole::getCreateTime);
+    public PageResponse pagingRole(Integer page, Integer size, String roleName) {
+        LambdaQueryWrapper<UcsRole> wrapper = Wrappers.<UcsRole>lambdaQuery().orderByDesc(UcsRole::getCreateTime);
+        if (!StringUtils.isBlank(roleName)){
+            wrapper.like(UcsRole::getRoleName,roleName);
+        }
         IPage<UcsRole> pageData = ucsRoleRepository.selectPage(new Page<>(page, size), wrapper);
         return PageResponse.build(pageData);
     }
@@ -124,5 +128,16 @@ public class UcsRoleServiceImpl implements UcsRoleService {
 
         return ucsRoleMenuRelations == null || ucsRoleMenuRelations.isEmpty() ?
                 Collections.emptyList() : ucsRoleMenuRelations.stream().map(UcsRoleMenuRelation::getMenuId).collect(Collectors.toList());
+    }
+
+    @Override
+    public void modifyRoleStatus(Long roleId, StatusType statusType) {
+        UcsRole ucsRole = ucsRoleRepository.selectById(roleId);
+        if (ucsRole == null || ucsRole.getStatus() == statusType) {
+            return;
+        }
+
+        ucsRole.setStatus(statusType);
+        ucsRoleRepository.updateById(ucsRole);
     }
 }

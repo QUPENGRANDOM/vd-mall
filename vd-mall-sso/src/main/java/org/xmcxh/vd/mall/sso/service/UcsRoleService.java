@@ -17,7 +17,7 @@ public interface UcsRoleService {
 
     boolean existsByName(Long id, String roleName);
 
-    PageResponse pagingRole(Integer page, Integer size);
+    PageResponse pagingRole(Integer page, Integer size, String roleName);
 
     void deleteRoleById(Long roleId);
 
@@ -26,4 +26,6 @@ public interface UcsRoleService {
     void addMenus(Long roleId, List<Long> menuIds);
 
     List<Long> getMenusByRoleId(Long roleId);
+
+    void modifyRoleStatus(Long roleId, StatusType statusType);
 }

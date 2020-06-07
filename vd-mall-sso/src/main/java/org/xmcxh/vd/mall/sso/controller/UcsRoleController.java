@@ -50,6 +50,20 @@ public class UcsRoleController {
         return new SuccessResponse();
     }
 
+    @ApiOperation("启用角色信息")
+    @PutMapping(value = "/{roleId}/enabled", produces = MediaType.APPLICATION_JSON_VALUE)
+    public RestResponse enabledRole(@PathVariable Long roleId) {
+        ucsRoleService.modifyRoleStatus(roleId, StatusType.ENABLED);
+        return new SuccessResponse();
+    }
+
+    @ApiOperation("禁用用角色信息")
+    @PutMapping(value = "/{roleId}/disabled", produces = MediaType.APPLICATION_JSON_VALUE)
+    public RestResponse disabledRole(@PathVariable Long roleId) {
+        ucsRoleService.modifyRoleStatus(roleId, StatusType.DISABLED);
+        return new SuccessResponse();
+    }
+
     @ApiOperation("删除角色信息")
     @DeleteMapping(value = "/{roleId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public RestResponse deleteRole(@PathVariable Long roleId) {
@@ -60,8 +74,9 @@ public class UcsRoleController {
     @ApiOperation("查询所有角色信息")
     @GetMapping(value = "/paging", produces = MediaType.APPLICATION_JSON_VALUE)
     public PageResponse pagingRole(@RequestParam("page") Integer page,
-                                   @RequestParam("size") Integer size) {
-        return ucsRoleService.pagingRole(page, size);
+                                   @RequestParam("size") Integer size,
+                                   @RequestParam(value = "roleName",required = false) String roleName) {
+        return ucsRoleService.pagingRole(page, size,roleName);
     }
 
     @ApiOperation("为角色分配菜单")
