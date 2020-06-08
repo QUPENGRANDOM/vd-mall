@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-public class UcsRoleServiceImpl implements UcsRoleService {
+public class UcsRoleServiceImpl extends ServiceImpl<UcsRoleRepository, UcsRole> implements UcsRoleService {
     @Autowired
     UcsRoleRepository ucsRoleRepository;
 
@@ -69,8 +71,8 @@ public class UcsRoleServiceImpl implements UcsRoleService {
     @Override
     public PageResponse pagingRole(Integer page, Integer size, String roleName) {
         LambdaQueryWrapper<UcsRole> wrapper = Wrappers.<UcsRole>lambdaQuery().orderByDesc(UcsRole::getCreateTime);
-        if (!StringUtils.isBlank(roleName)){
-            wrapper.like(UcsRole::getRoleName,roleName);
+        if (!StringUtils.isBlank(roleName)) {
+            wrapper.like(UcsRole::getRoleName, roleName);
         }
         IPage<UcsRole> pageData = ucsRoleRepository.selectPage(new Page<>(page, size), wrapper);
         return PageResponse.build(pageData);

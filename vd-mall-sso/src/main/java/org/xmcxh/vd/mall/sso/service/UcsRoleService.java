@@ -1,5 +1,6 @@
 package org.xmcxh.vd.mall.sso.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import org.xmcxh.vd.mall.sso.dto.UcsRoleRequest;
 import org.xmcxh.vd.mall.sso.modle.StatusType;
 import org.xmcxh.vd.mall.sso.modle.UcsRole;
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * Created by pengq on 2020/5/25 14:13.
  */
-public interface UcsRoleService {
+public interface UcsRoleService extends IService<UcsRole> {
     List<UcsRole> listRoleByStatus(StatusType enabled);
 
     void addRole(UcsRoleRequest ucsRoleRequest);

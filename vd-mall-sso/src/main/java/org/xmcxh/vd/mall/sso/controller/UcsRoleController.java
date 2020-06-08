@@ -42,12 +42,20 @@ public class UcsRoleController {
     }
 
     @ApiOperation("更新角色信息")
-    @GetMapping(value = "/{roleId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{roleId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public RestResponse updateRole(@PathVariable Long roleId,
                                    @RequestBody UcsRoleRequest ucsRoleRequest) {
         ucsRoleService.updateRole(roleId, ucsRoleRequest);
 
         return new SuccessResponse();
+    }
+
+    @ApiOperation("查询角色信息")
+    @GetMapping(value = "/{roleId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public RestResponse getRoleInfo(@PathVariable Long roleId) {
+        UcsRole ucsRole = ucsRoleService.getById(roleId);
+
+        return new SuccessResponse().withData(ucsRole);
     }
 
     @ApiOperation("启用角色信息")
