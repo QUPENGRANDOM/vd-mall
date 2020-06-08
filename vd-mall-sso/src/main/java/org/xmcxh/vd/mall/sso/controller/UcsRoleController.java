@@ -27,7 +27,7 @@ public class UcsRoleController {
     UcsRoleService ucsRoleService;
 
     @ApiOperation("添加角色信息")
-    @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public RestResponse addRole(@RequestBody UcsRoleRequest ucsRoleRequest) {
         ucsRoleService.addRole(ucsRoleRequest);
         return new SuccessResponse();
@@ -75,20 +75,20 @@ public class UcsRoleController {
     @GetMapping(value = "/paging", produces = MediaType.APPLICATION_JSON_VALUE)
     public PageResponse pagingRole(@RequestParam("page") Integer page,
                                    @RequestParam("size") Integer size,
-                                   @RequestParam(value = "roleName",required = false) String roleName) {
-        return ucsRoleService.pagingRole(page, size,roleName);
+                                   @RequestParam(value = "roleName", required = false) String roleName) {
+        return ucsRoleService.pagingRole(page, size, roleName);
     }
 
     @ApiOperation("为角色分配菜单")
     @PostMapping(value = "/{roleId}/menus", consumes = MediaType.APPLICATION_JSON_VALUE)
     public RestResponse addMenus(@PathVariable("roleId") Long roleId,
                                  @RequestBody List<Long> menuIds) {
-        ucsRoleService.addMenus(roleId,menuIds);
+        ucsRoleService.addMenus(roleId, menuIds);
         return new SuccessResponse();
     }
 
     @ApiOperation("查询该角已经有的菜单")
-    @GetMapping(value = "/{roleId}/menus", produces= MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{roleId}/menus", produces = MediaType.APPLICATION_JSON_VALUE)
     public RestResponse getMenus(@PathVariable("roleId") Long roleId) {
         List<Long> roleIds = ucsRoleService.getMenusByRoleId(roleId);
         return new SuccessResponse().withData(roleIds);

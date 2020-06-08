@@ -1,5 +1,6 @@
 package org.xmcxh.vd.mall.sso.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import vd.mall.response.SuccessResponse;
  */
 @RestController
 @RequestMapping("/api/v1/menus")
+@Api(value = "菜单管理", tags = "UcsMenuController")
 public class UcsMenuController {
     @Autowired
     UcsMenuService ucsMenuService;
