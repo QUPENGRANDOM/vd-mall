@@ -35,5 +35,4 @@ public class UcsMenuController {
                                            @RequestParam("size") Integer size) {
         return ucsMenuService.pagingMenus(page, size, parentId);
     }
-
 }

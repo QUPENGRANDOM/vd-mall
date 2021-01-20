@@ -11,11 +11,14 @@ import org.xmcxh.vd.mall.sso.exception.GeneralException;
 import org.xmcxh.vd.mall.sso.dto.ModifyPasswordRequest;
 import org.xmcxh.vd.mall.sso.dto.UcsUserRequest;
 import org.xmcxh.vd.mall.sso.modle.StatusType;
+import org.xmcxh.vd.mall.sso.modle.UcsMenu;
 import org.xmcxh.vd.mall.sso.service.UcsUserService;
 import org.xmcxh.vd.mall.sso.vo.UcsUserVO;
 import vd.mall.response.PageResponse;
 import vd.mall.response.RestResponse;
 import vd.mall.response.SuccessResponse;
+
+import java.util.List;
 
 /**
  * Created by pengq on 2020/5/12 14:23.
@@ -104,6 +107,13 @@ public class UcsUserController {
     @PostMapping(value = "/{userId}/reset", produces = MediaType.APPLICATION_JSON_VALUE)
     public RestResponse restPassword(@PathVariable("userId") Long userId) {
         ucsUserService.restPassword(userId);
+        return new SuccessResponse();
+    }
+
+    @ApiOperation(value = "查询我的菜单")
+    @PostMapping(value = "/{userId}/menus", produces = MediaType.APPLICATION_JSON_VALUE)
+    public RestResponse listMenus(@PathVariable("userId") Long userId) {
+        List<UcsMenu> menus = ucsUserService.listMenusByUserId(userId);
         return new SuccessResponse();
     }
 }

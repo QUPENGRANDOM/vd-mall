@@ -11,14 +11,12 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.xmcxh.boot.jwt.JwtTokenProvider;
 import org.xmcxh.boot.jwt.TokenProvider;
 import org.xmcxh.vd.mall.sso.dto.LoginRequest;
 import org.xmcxh.vd.mall.sso.dto.UcsUserRequest;
@@ -26,21 +24,18 @@ import org.xmcxh.vd.mall.sso.exception.UserNameExistsException;
 import org.xmcxh.vd.mall.sso.exception.UserNotFoundException;
 import org.xmcxh.vd.mall.sso.exception.UserPasswordException;
 import org.xmcxh.vd.mall.sso.dto.ModifyPasswordRequest;
-import org.xmcxh.vd.mall.sso.modle.StatusType;
-import org.xmcxh.vd.mall.sso.modle.UcsRole;
-import org.xmcxh.vd.mall.sso.modle.UcsUser;
-import org.xmcxh.vd.mall.sso.modle.UcsUserRoleRelation;
+import org.xmcxh.vd.mall.sso.modle.*;
+import org.xmcxh.vd.mall.sso.repository.UcsRoleMenuRelationRepository;
 import org.xmcxh.vd.mall.sso.repository.UcsRoleRepository;
 import org.xmcxh.vd.mall.sso.repository.UcsUserRepository;
 import org.xmcxh.vd.mall.sso.repository.UcsUserRoleRelationRepository;
 import org.xmcxh.vd.mall.sso.security.UserDetail;
+import org.xmcxh.vd.mall.sso.service.UcsMenuService;
 import org.xmcxh.vd.mall.sso.service.UcsUserService;
 import org.xmcxh.vd.mall.sso.vo.UcsUserVO;
 import vd.mall.response.PageResponse;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -57,6 +52,9 @@ public class UcsUserServiceImpl implements UcsUserService {
 
     @Autowired
     UcsUserRoleRelationRepository ucsUserRoleRelationRepository;
+
+    @Autowired
+    UcsMenuService ucsMenuService;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -105,8 +103,8 @@ public class UcsUserServiceImpl implements UcsUserService {
     @Override
     public boolean exists(Long id, String username) {
         Wrapper<UcsUser> wrapper = Wrappers.<UcsUser>lambdaQuery().eq(UcsUser::getUsername, username);
-        UcsUser wuser = ucsUserRepository.selectOne(wrapper);
-        return wuser != null && !wuser.getId().equals(id);
+        UcsUser user = ucsUserRepository.selectOne(wrapper);
+        return user != null && !user.getId().equals(id);
     }
 
     @Override
@@ -117,9 +115,9 @@ public class UcsUserServiceImpl implements UcsUserService {
         }
 
         UcsUser ucsUser = ucsUserRepository.selectById(userId);
-//        if (passwordEncoder.matches(ucsUser.getPassword(), modifyPasswordRequest.getOldPassword())) {
-//            throw new UserPasswordException("用户输入的原始密码不正确");
-//        }
+        if (passwordEncoder.matches(ucsUser.getPassword(), modifyPasswordRequest.getOldPassword())) {
+            throw new UserPasswordException("用户输入的原始密码不正确");
+        }
 
         ucsUser.setPassword(modifyPasswordRequest.getPassword());
 
@@ -198,15 +196,14 @@ public class UcsUserServiceImpl implements UcsUserService {
     }
 
     @Override
-    public UserDetail getUserDetailsByUserName(String username) throws UsernameNotFoundException {
+    public UserDetail loadUserDetailsByUserName(String username) throws UsernameNotFoundException {
         LambdaQueryWrapper<UcsUser> queryUserWrapper = Wrappers.<UcsUser>lambdaQuery().eq(UcsUser::getUsername, username);
         UcsUser ucsUser = ucsUserRepository.selectOne(queryUserWrapper);
         if (ucsUser == null) {
             throw new UsernameNotFoundException("Not found username:" + username);
         }
 
-        LambdaQueryWrapper<UcsRole> queryRoleWrapper = null;
-        List<UcsRole> roles = ucsRoleRepository.selectList(queryRoleWrapper);
+        List<UcsRole> roles =this.listRoleByUserId(ucsUser.getId());
         return new UserDetail(ucsUser, roles);
     }
 
@@ -227,7 +224,7 @@ public class UcsUserServiceImpl implements UcsUserService {
 
     @Override
     public String login(LoginRequest loginRequest) {
-        UserDetails userDetails = this.getUserDetailsByUserName(loginRequest.getUsername());
+        UserDetails userDetails = this.loadUserDetailsByUserName(loginRequest.getUsername());
         if (!passwordEncoder.matches(loginRequest.getPassword(), userDetails.getPassword())) {
             throw new BadCredentialsException("密码不正确");
         }
@@ -244,5 +241,31 @@ public class UcsUserServiceImpl implements UcsUserService {
         LambdaQueryWrapper<UcsUser> queryUserWrapper = Wrappers.<UcsUser>lambdaQuery().eq(UcsUser::getUsername, username);
         UcsUser ucsUser = ucsUserRepository.selectOne(queryUserWrapper);
         return this.getUserAndRoleById(ucsUser.getId());
+    }
+
+    @Override
+    public List<UcsMenu> listMenusByUserId(Long userId) {
+        List<UcsRole> ucsRoles = this.listRoleByUserId(userId);
+
+        if (ucsRoles == null || ucsRoles.isEmpty()){
+            return Collections.emptyList();
+        }
+
+        Set<Long> roleIdSet = ucsRoles.stream().map(UcsRole::getId).collect(Collectors.toSet());
+
+        return ucsMenuService.listMenuByRoleId(roleIdSet);
+
+    }
+
+    private List<UcsRole> listRoleByUserId(Long userId) {
+        LambdaQueryWrapper<UcsUserRoleRelation> relationWrapper = Wrappers.<UcsUserRoleRelation>lambdaQuery().eq(UcsUserRoleRelation::getUserId, userId);
+        List<UcsUserRoleRelation> relations = ucsUserRoleRelationRepository.selectList(relationWrapper);
+        if (relations == null || relations.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Long> roleIdList = relations.stream().map(UcsUserRoleRelation::getRoleId).collect(Collectors.toList());
+        LambdaQueryWrapper<UcsRole> queryRoleWrapper = Wrappers.<UcsRole>lambdaQuery().in(UcsRole::getId, roleIdList);
+        return ucsRoleRepository.selectList(queryRoleWrapper);
     }
 }

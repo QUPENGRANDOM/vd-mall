@@ -8,10 +8,13 @@ import org.xmcxh.vd.mall.sso.exception.UserNameExistsException;
 import org.xmcxh.vd.mall.sso.exception.UserNotFoundException;
 import org.xmcxh.vd.mall.sso.exception.UserPasswordException;
 import org.xmcxh.vd.mall.sso.modle.StatusType;
+import org.xmcxh.vd.mall.sso.modle.UcsMenu;
 import org.xmcxh.vd.mall.sso.modle.UcsUser;
 import org.xmcxh.vd.mall.sso.security.UserDetail;
 import org.xmcxh.vd.mall.sso.vo.UcsUserVO;
 import vd.mall.response.PageResponse;
+
+import java.util.List;
 
 /**
  * Created by pengq on 2020/5/12 14:29.
@@ -32,7 +35,7 @@ public interface UcsUserService {
 
     PageResponse pagingUser(Integer page, Integer size, String name);
 
-    UserDetail getUserDetailsByUserName(String username) throws UsernameNotFoundException;
+    UserDetail loadUserDetailsByUserName(String username) throws UsernameNotFoundException;
 
     void removeUserById(Long userId);
 
@@ -41,4 +44,6 @@ public interface UcsUserService {
     String login(LoginRequest loginRequest);
 
     UcsUserVO getUserByToken(String token);
+
+    List<UcsMenu> listMenusByUserId(Long userId);
 }
