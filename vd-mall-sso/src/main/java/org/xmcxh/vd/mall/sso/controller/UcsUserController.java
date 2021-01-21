@@ -97,8 +97,8 @@ public class UcsUserController {
 
     @ApiOperation(value = "用户分页")
     @GetMapping(value = "/paging", produces = MediaType.APPLICATION_JSON_VALUE)
-    public PageResponse pagingUser(@RequestParam("page") Integer page,
-                                   @RequestParam("size") Integer size,
+    public PageResponse pagingUser(@RequestParam(value = "page",defaultValue = "1") Integer page,
+                                   @RequestParam(value = "size",defaultValue = "10") Integer size,
                                    @RequestParam(value = "username", required = false) String name) {
         return ucsUserService.pagingUser(page, size, name);
     }
