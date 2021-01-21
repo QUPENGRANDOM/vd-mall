@@ -30,6 +30,6 @@ public class UcsUserViewController {
     @ApiOperation("角色分页查询页面")
     @GetMapping(value = "/roles")
     public String getRolesPage() {
-        return "/view/role/role_list";
+        return "/views/role/role_list";
     }
 }

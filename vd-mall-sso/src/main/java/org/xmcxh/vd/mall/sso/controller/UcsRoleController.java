@@ -81,8 +81,8 @@ public class UcsRoleController {
 
     @ApiOperation("查询所有角色信息")
     @GetMapping(value = "/paging", produces = MediaType.APPLICATION_JSON_VALUE)
-    public PageResponse pagingRole(@RequestParam("page") Integer page,
-                                   @RequestParam("size") Integer size,
+    public PageResponse pagingRole(@RequestParam(value = "page",defaultValue = "1") Integer page,
+                                   @RequestParam(value = "size",defaultValue = "10") Integer size,
                                    @RequestParam(value = "roleName", required = false) String roleName) {
         return ucsRoleService.pagingRole(page, size, roleName);
     }

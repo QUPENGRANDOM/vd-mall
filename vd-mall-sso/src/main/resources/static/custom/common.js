@@ -11,7 +11,7 @@
             fixedHeader: true,
             searching: false,
             aLengthMenu: [10],
-            ajax: {url: opts.url, dataSrc: 'data'},
+            ajax: {url: opts.url, dataSrc: 'list'},
             language: {url: '/lang/datatable.chs.json'}
         };
 

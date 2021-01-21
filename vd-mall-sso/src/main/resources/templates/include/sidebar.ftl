@@ -4,21 +4,12 @@
             <li>
                 <a href="javascript:void(0)" class="waves-effect">
                     <i data-icon="F" class="linea-icon linea-software fa-fw"></i>
-                    <span class="hide-menu">Multi level<span class="fa arrow"></span>
-                        </span>
+                    <span class="hide-menu">权限管理<span class="fa arrow"></span></span>
                 </a>
                 <ul class="nav nav-second-level">
                     <li> <a href="/view/user/list">用户管理</a> </li>
-                    <li> <a href="javascript:void(0)">角色管理</a> </li>
+                    <li> <a href="/view/user/roles">角色管理</a> </li>
                     <li> <a href="javascript:void(0)">菜单管理</a> </li>
-                    <li> <a href="javascript:void(0)" class="waves-effect">Third Level <span class="fa arrow"></span></a>
-                        <ul class="nav nav-third-level">
-                            <li> <a href="javascript:void(0)">Third Level Item</a> </li>
-                            <li> <a href="javascript:void(0)">Third Level Item</a> </li>
-                            <li> <a href="javascript:void(0)">Third Level Item</a> </li>
-                            <li> <a href="javascript:void(0)">Third Level Item</a> </li>
-                        </ul>
-                    </li>
                 </ul>
             </li>
         </ul>
@@ -26,7 +17,7 @@
 </div>
 <script src="/custom/menu.js"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
+    /*$(document).ready(function () {
         $("#side-menu").InitSidebar(
             [
                 {
@@ -113,5 +104,5 @@
                 }
             ]
         );
-    })
+    })*/
 </script>

@@ -27,10 +27,6 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4 form-group" style="margin-bottom: 10px;">
-                                    <label class="col-md-3 control-label" style="text-align: center">昵称：</label>
-                                    <div class="col-md-6">
-                                        <input type="text" name="nickname" placeholder="将昵称模糊匹配..." class="form-control"/>
-                                    </div>
                                 </div>
                                 <div id="searchKey" class="col-md-3 form-group" style="margin-bottom: 10px;"></div>
 
@@ -54,21 +50,14 @@
     </div>
 
     <div class="modal fade" id="saveOrUpdateDialog" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="bootbox-close-button close hidden" data-dismiss="modal"
-                            aria-hidden="true">×
-                    </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">网络</h4>
                 </div>
                 <div class="modal-body">
                     <div>
-                        <div class="form-group">
-                            <label for="avatar" class="control-label">头像:</label>
-                            <input type="file" name="avatar" class="dropify"
-                                   data-default-file="https://tools.cloudbed.vip/images/bg1.jpg"/>
-                        </div>
                         <div class="form-group">
                             <label for="dialog_username" class="control-label">用户名:</label>
                             <input type="text" data-readonly="update" class="form-control" name="username"
@@ -83,19 +72,15 @@
                             <input type="text" class="form-control" name="nickname" id="dialog_nickname">
                         </div>
                         <div class="form-group">
-                            <label for="dialog_age" class="control-label">年龄:</label>
-                            <input type="text" class="form-control" name="age" id="dialog_age">
-                        </div>
-                        <div class="form-group">
                             <label for="dialog_sex" class="control-label">性别:</label>
                             <div class="row icheck-group">
                                 <div class="col-md-2">
-                                    <input type="radio" class="check" id="square-radio-0" value="0" name="sex"
+                                    <input type="radio" class="check" id="square-radio-0" value="MEN" name="sex"
                                            data-radio="iradio_square-blue">
                                     <label for="square-radio-0">男</label>
                                 </div>
                                 <div class="col-md-2">
-                                    <input type="radio" class="check" id="square-radio-1" value="1" name="sex"
+                                    <input type="radio" class="check" id="square-radio-1" value="WOMEN" name="sex"
                                            data-radio="iradio_square-blue">
                                     <label for="square-radio-1">女</label>
                                 </div>
@@ -152,23 +137,16 @@
 
     var $dataTable = $("#table").InitDataTable({
         url: "/api/v1/users/paging",
-        thead: ["头像", "用户名", "昵称", "年龄", "性别", "邮箱", "角色", "创建时间", "操作"],
+        thead: ["用户名", "昵称", "性别", "邮箱", "创建时间", "操作"],
         columns: [
-            {
-                data: "avatar",
-                render: function (data) {
-                    return '<img class="img-responsive img-rounded" style="width: 30px;height: 20px" src="/api/v1/image/get?name=' + data + '" alt="avatar"/>';
-                }
-            },
             "username",
             "nickname",
-            "age",
             {
                 data: "sex",
                 render: function (data) {
-                    if (data === 0) {
+                    if (data === "MEN") {
                         return "男";
-                    } else if (data === 1) {
+                    } else if (data === "WOMEN") {
                         return "女";
                     } else {
                         return "未知";
@@ -177,21 +155,9 @@
             },
             "mail",
             {
-                data: "roleId",
-                render: function (data) {
-                    if (data === 1) {
-                        return "管理员";
-                    } else if (data === 2) {
-                        return "教师";
-                    } else {
-                        return "未知";
-                    }
-                }
-            },
-            {
                 data: "createTime",
                 render: function (data, type, full, meta) {
-                    return data.replace('T', " ");
+                    return data.replace('T', " ").replace(".000+0000","");
                 }
             },
             {
@@ -212,7 +178,7 @@
     var _edit = function (id) {
         $dialog.show({title: "编辑用户", requestType: "update"});
 
-        $.httpRequest.get("/api/users/" + id, null, function (res) {
+        $.httpRequest.get("/api/v1/users/" + id, null, function (res) {
             $dialog.write(res.data);
         }, true)
     };
@@ -243,7 +209,7 @@
 
     var _custom_query = function () {
         var data = $("#form-horizontal").readData();
-        var url = $.appendParam("/api/users",data);
+        var url = $.appendParam("/api/v1/users/paging",data);
         console.log(url);
         $dataTable.ajax.url(url).load();
     }
