@@ -29,16 +29,26 @@
 <script>
     var $dataTable = $("#table").InitDataTable({
         url: "/api/v1/roles/paging",
-        thead: ["角色名", "描述", "创建时间"],
+        thead: ["角色名", "描述", "创建时间", "操作"],
         columns: [
-           "roleName",
+            "roleName",
             "description",
             {
                 data: "createTime",
                 render: function (data) {
-                    return  data.replace('T', " ").replace(".000+0000","");
+                    return data.replace('T', " ").replace(".000+0000", "");
+                }
+            },
+            {
+                data: "id",
+                render: function (data) {
+                    return '<a href="#" data-type="edit" onclick="settingMenus(' + data + ')"><span class="fa fa-edit text-warning m-r-10">配置菜单</span></a>'
                 }
             }
         ]
     });
+
+    var settingMenus = function (roleId) {
+        window.href.location = "" + roleId;
+    }
 </script>
