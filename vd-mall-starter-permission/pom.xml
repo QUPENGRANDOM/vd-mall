@@ -34,8 +34,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.xmcxh.boot</groupId>
-            <artifactId>spring-boot-jwt-starter</artifactId>
+            <artifactId>vd-mall-parent</artifactId>
+            <groupId>com.vd.mall</groupId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
